@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import NpcAvatar from './NpcAvatar'
 import Chat from './Chat.js'
@@ -6,18 +6,34 @@ import Plus from './Plus.js'
 import IconButton from './IconButton.js'
 import NpcForm from './NpcForm.js'
 
-const ChooseNpc = ({ activeNpc, setActiveNpc, messages, setMessages }) => {
+import get from '../utils/get.js'
+
+const ChooseNpc = () => {
+  const [activeNpc, setActiveNpc] = useState(null)
   const [npcs, setNpcs] = useState([])
   const [newNpc, setNpcForm] = useState(null)
+  const [messages, setMessages] = useState([])
 
   const fetchNpcs = async () => {
-    const response = await fetch(`${window.env.API_URL}/npcs`)
-    setNpcs(await response.json())
+    const response = await get('npcs')
+    setNpcs(response)
+  }
+
+  const fetchMessages = async () => {
+    if (!activeNpc?.id) return
+
+    const response = await get(`messages?npc_id=${activeNpc?.id}`)
+    const messages = response.filter((message) => message.role !== 'system')
+    setMessages(messages)
   }
 
   useEffect(() => {
     fetchNpcs()
   }, [])
+
+  useEffect(() => {
+    fetchMessages()
+  }, [activeNpc])
 
   let newNpcWrapperClass = 'p-3 flex justify-center items-center'
   if (activeNpc?.id) {

@@ -1,4 +1,5 @@
-import React from 'react'
+import post from '../utils/post.js'
+import put from '../utils/put.js'
 
 const TextField = ({ label, value, onChange }) => {
   return <div className="flex flex-row gap-16">
@@ -50,22 +51,15 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
   }
 
   const save = async () => {
-    const response = await fetch(`${window.env.API_URL}/npcs/${npc.id || ''}`, {
-      method: npc.id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ npc }),
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-
-      if (npc.id) {
-        setNpcs(npcs.map((n) => n.id === npc.id ? data : n))
-      } else {
-        setNpcs([...npcs, data])
-      }
-      setNpcForm(null)
+    if (npc.id) {
+      const data = await put(`npcs/${npc.id}`, npc)
+      setNpcs(npcs.map((n) => n.id === npc.id ? data : n))
+    } else {
+      const data = await post('npcs', npc)
+      setNpcs([...npcs, data])
     }
+
+    setNpcForm(null)
   }
 
   const addInformation = () => {

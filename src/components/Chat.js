@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
+import { useAudioRecorder } from 'react-audio-voice-recorder'
 
 import Message from './Message'
 import IconButton from './IconButton'
@@ -6,7 +7,7 @@ import Back from './Back'
 import Play from './Play'
 import Trash from './Trash'
 import Stop from './Stop'
-import { useAudioRecorder } from 'react-audio-voice-recorder'
+import post from '../utils/post.js'
 
 const Chat = ({ activeNpc, messages, setMessages }) => {
   const [canceled, setCanceled] = useState(true)
@@ -35,7 +36,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     setMessages({ ...messages, [activeNpc.id]: messages.slice(0, -1) })
   }
 
-  const post = async () => {
+  const talk = async () => {
     const formData = new FormData()
     formData.append('npc',activeNpc.id)
     formData.append('ping', false)
@@ -43,21 +44,14 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     formData.append('audio_data', recordingBlob, 'file')
     formData.append('type', 'webm')
 
-    const response = await fetch(`${window.env.API_URL}/npcs/${activeNpc.id}/talk`, {
-      method: 'POST',
-      body: formData
-    })
+    const data = post(`npcs/${activeNpc.id}/talk`, formData)
 
-    const data = await response.json()
-
-    if (data) {
-      setAutoPlay(true)
-      setMessages([...messages, ...data])
-    }
+    setAutoPlay(true)
+    setMessages([...messages, ...data])
   }
 
   useEffect(() => {
-    if (recordingBlob && !canceled && activeNpc?.id) post()
+    if (recordingBlob && !canceled && activeNpc?.id) talk()
   }, [recordingBlob])
 
   useEffect(() => {
@@ -74,7 +68,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
 
   return <div className={wrapperClass}>
     <div className="buttons-container flex flex-row justify-center items-center gap-16 ">
-      <IconButton Icon={Back} onClick={undo} disabled={isRecording || messages.length == 0} />
+      <IconButton Icon={Back} onClick={undo} disabled={isRecording || messages.length === 0} />
       <IconButton Icon={isRecording ? Stop : Play} onClick={click} buttonClass="w-16" />
       <IconButton Icon={Trash} onClick={cancel} disabled={!isRecording} />
     </div>

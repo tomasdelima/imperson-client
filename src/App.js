@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  Link,
+} from 'react-router-dom'
 
-import ChooseNpc from './ChooseNpc.js'
+import ChooseNpc from './components/ChooseNpc.js'
+import Login from './components/Login.js'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <ChooseNpc />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+])
 
 const App = () => {
-  const [activeNpc, setActiveNpc] = useState(null)
-  const [messages, setMessages] = useState([])
-
-  useEffect(() => {
-    fetchMessages()
-  }, [activeNpc])
-
-  const fetchMessages = async () => {
-    if (!activeNpc?.id) return
-
-    const response = await fetch(`${window.env.API_URL}/messages?npc_id=${activeNpc?.id}`)
-    let messages = await response.json()
-    messages = messages.filter((message) => message.role !== 'system')
-    setMessages(messages)
-  }
-
   return <div className="h-screen p-4 flex flex-col justify-start">
-    <ChooseNpc
-      activeNpc={activeNpc}
-      setActiveNpc={setActiveNpc}
-      messages={messages}
-      setMessages={setMessages}
-    />
+    <RouterProvider router={router} />
   </div>
 }
 

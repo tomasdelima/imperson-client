@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import ReactAudioPlayer from 'react-audio-player'
+
 import IconButton from './IconButton'
 import Play from './Play'
 import Stop from './Stop'
@@ -13,6 +14,7 @@ const Message = ({ item, autoPlay }) => {
     ref.current.audioEl.current.currentTime = 0
     ref.current.audioEl.current.play()
   }
+
   const stop = () => {
     setPlaying(false)
     ref.current.audioEl.current.pause()
