@@ -8,6 +8,7 @@ import Play from './Play'
 import Trash from './Trash'
 import Send from './Send'
 import Stop from './Stop'
+import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
 
 const Chat = ({ activeNpc, messages, setMessages }) => {
@@ -40,9 +41,14 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
   }
 
   const undo = () => {
+    if (loading) return
     if (isRecording) return
+    if (messages.length < 2) return
 
-    setMessages({ ...messages, [activeNpc.id]: messages.slice(0, -1) })
+    setLoading(true)
+    messages.slice(-2).map(item => item.id && destroy(`messages/${item.id}`))
+    setLoading(false)
+    setMessages(messages.slice(0, -2))
   }
 
   const talk = async () => {
@@ -90,7 +96,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     setAutoPlay(false)
   }, [activeNpc])
 
-  let wrapperClass = 'flex flex-col items-center flex-grow gap-6 2xl:max-w-6xl lg:max-w-4xl md:max-w-3xl max-w-full self-center '
+  let wrapperClass = 'flex flex-col items-center flex-grow gap-6 max-w-6xl 2xl:w-3/6 lg:w-4/6 md:w-5/6 w-full px-8 self-center '
   wrapperClass += activeNpc?.id ? 'opacity-1' : 'opacity-0'
 
   return <div className={wrapperClass}>

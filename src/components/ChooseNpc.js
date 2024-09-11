@@ -23,8 +23,7 @@ const ChooseNpc = () => {
     if (!activeNpc?.id) return
 
     const response = await get(`messages?npc_id=${activeNpc?.id}`)
-    const messages = response.filter((message) => message.role !== 'system')
-    setMessages(messages)
+    setMessages(response)
   }
 
   useEffect(() => {
