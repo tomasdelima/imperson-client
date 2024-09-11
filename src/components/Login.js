@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import Button from './Button.js'
 import post from '../utils/post.js'
 
 const TextField = ({ label, value, type, onChange }) => {
@@ -15,7 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const save = async () => {
+  const login = async () => {
     const { auth_token: authToken } = await post('sessions', { email, password })
     localStorage.setItem('authToken', authToken)
     navigate('/')
@@ -25,12 +26,7 @@ const Login = () => {
     <TextField label="Email" type="text" value={email} onChange={setEmail} />
     <TextField label="Password" type="password" value={password} onChange={setPassword} />
 
-    <button
-      className="cursor-pointer rounded hover:bg-gray-900 px-4 py-2 mt-8 transition-all duration-200 select-none"
-      onClick={save}
-    >
-      Save
-    </button>
+    <Button label="Save" onClick={login} />
   </div>
 }
 

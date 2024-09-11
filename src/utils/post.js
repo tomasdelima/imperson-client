@@ -21,7 +21,7 @@ const post = async (path, body) => {
     }
   }
 
-  throw new Error(`Failed to get ${path}: ${response.statusText}`)
+  throw new Error(`Failed to post ${path}: ${response.statusText}`)
 }
 
 export default post

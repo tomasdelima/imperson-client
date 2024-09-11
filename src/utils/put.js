@@ -21,7 +21,7 @@ const put = async (path, body) => {
     }
   }
 
-  throw new Error(`Failed to get ${path}: ${response.statusText}`)
+  throw new Error(`Failed to put ${path}: ${response.statusText}`)
 }
 
 export default put
