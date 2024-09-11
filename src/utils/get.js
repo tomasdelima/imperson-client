@@ -1,5 +1,12 @@
 const get = async (path) => {
-  const response = await fetch(`${window.env.API_URL}/${path}`)
+  const response = await fetch(
+    `${window.env.API_URL}/${path}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+      }
+    }
+  )
 
   if (response.status === 401) {
     window.location.href = '/login'

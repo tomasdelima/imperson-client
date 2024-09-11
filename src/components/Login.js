@@ -16,7 +16,8 @@ const Login = () => {
   const navigate = useNavigate()
 
   const save = async () => {
-    post('sessions', { email, password })
+    const { auth_token: authToken } = await post('sessions', { email, password })
+    localStorage.setItem('authToken', authToken)
     navigate('/')
   }
 

@@ -44,7 +44,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     formData.append('audio_data', recordingBlob, 'file')
     formData.append('type', 'webm')
 
-    const data = post(`npcs/${activeNpc.id}/talk`, formData)
+    const data = await post(`npcs/${activeNpc.id}/talk`, formData)
 
     setAutoPlay(true)
     setMessages([...messages, ...data])
