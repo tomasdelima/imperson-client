@@ -4,7 +4,7 @@ import put from '../utils/put.js'
 const TextField = ({ label, value, onChange }) => {
   return <div className="flex flex-row gap-16">
     <label className="w-40 leading-10">{label}</label>
-    <input className="w-80 p-2 text-[#282c34]" value={value} onChange={onChange} />
+    <input className="w-80 p-2 text-[#282c34]" value={value || ''} onChange={onChange} />
   </div>
 }
 
@@ -25,13 +25,21 @@ const SelectField = ({ label, value, onChange, options }) => {
   </div>
 }
 
-const InformationForm = ({ index, information, updateField }) => {
+
+const InformationForm = ({ index, information, updateField, deleteInformation }) => {
   return <div className="flex flex-col">
-    <TextField label="If" value={information.if} onChange={(e) => updateField(index, 'if', e)} />
+    <TextField label="If" value={information.condition} onChange={(e) => updateField(index, 'condition', e)} />
     <TextField label="Ask for a(n)" value={information.check} onChange={(e) => updateField(index, 'check', e)} />
     <TextField label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} />
     <TextField label="On success" value={information.success} onChange={(e) => updateField(index, 'success', e)} />
     <TextField label="On failure" value={information.failure} onChange={(e) => updateField(index, 'failure', e)} />
+
+    <button
+      className="cursor-pointer rounded hover:bg-gray-900 px-4 py-2 mt-8 transition-all duration-200 select-none self-center"
+      onClick={() => deleteInformation(index, information.id)}
+    >
+      Delete
+    </button>
   </div>
 }
 
@@ -75,6 +83,12 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
     setNpcForm(updatedNpc)
   }
 
+  const deleteInformation = (index, id) => {
+    let updatedNpc = { ...npc }
+    updatedNpc.informations[index] = { id, delete: true }
+    setNpcForm(updatedNpc)
+  }
+
   const updateInformationField = (index, field, e) => {
     let updatedNpc = { ...npc }
     updatedNpc.informations[index][field] = e.target.value
@@ -101,11 +115,12 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
 
         <label className="my-4">Informations</label>
 
-        {(npc.informations || []).map((information, index) => <InformationForm
+        {(npc.informations || []).filter((i) => !i.delete).map((information, index) => <InformationForm
           key={index}
           index={index}
           information={information}
           updateField={updateInformationField}
+          deleteInformation={deleteInformation}
         />)}
 
         <button
