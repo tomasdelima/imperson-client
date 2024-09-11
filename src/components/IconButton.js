@@ -10,7 +10,7 @@ const IconButton = ({ onClick, disabled = false, Icon, buttonClass }) => {
     className += ' cursor-pointer opacity-80 hover:opacity-100 transition-opacity duration-200 ease-in-out'
   }
 
-  return <div onClick={onClick} className={className}>
+  return <div onClick={() => disabled || onClick()} className={className}>
     <Icon fill={disabled ? '#777' : '#ddd'}  />
   </div>
 }
