@@ -108,7 +108,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
 
     <div className="messages-wrapper pr-6 w-full h-[65vh] overflow-y-scroll flex justify-center">
       <div className="flex flex-grow flex-col">
-        <div className="flex flex-grow flex-col justify-end items-stretch gap-8">
+        <div className="flex flex-grow flex-col justify-end items-stretch">
           {messages.map((item, index) =>
             <Message
               key={index}
