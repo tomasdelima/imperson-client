@@ -1,4 +1,4 @@
-const post = async (path, body, options = {}) => {
+const post = async (path, body = {}, options = {}) => {
   options = {
     setContentType: true,
     stringifyBody: true,

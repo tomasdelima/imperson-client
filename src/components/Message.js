@@ -6,7 +6,7 @@ import Play from './Play'
 import Stop from './Stop'
 
 const Message = ({ item, autoPlay }) => {
-  const[playing, setPlaying] = useState(false)
+  const[playing, setPlaying] = useState(autoPlay)
   const[hover, setHover] = useState(false)
   const ref = useRef(null)
 
@@ -51,7 +51,9 @@ const Message = ({ item, autoPlay }) => {
       {playing && <IconButton Icon={Stop} onClick={stop} buttonClass="w-4 h-5 shrink-0" />}
     </>}
     <div className="relative">
-      {item.content}
+      <div className="flex items-center gap-2">
+        {item.content}
+      </div>
       {durations && hover && <div className={durationsClass}>
         ({durations})
       </div>}

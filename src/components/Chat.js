@@ -4,19 +4,24 @@ import { useAudioRecorder } from 'react-audio-voice-recorder'
 import Message from './Message'
 import IconButton from './IconButton'
 import Back from './Back'
-import Play from './Play'
-import Trash from './Trash'
+import Circle from './Circle'
+import Cycle from './Cycle'
+import Loading from './Loading'
 import Send from './Send'
 import Stop from './Stop'
+import Trash from './Trash'
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
 
 const Chat = ({ activeNpc, messages, setMessages }) => {
-  const [loading, setLoading] = useState(false)
+  const [transcribeLoading, setTranscribeLoading] = useState(false)
+  const [speechLoading, setSpeechLoading] = useState(false)
   const [canceled, setCanceled] = useState(true)
   const [autoPlay, setAutoPlay] = useState(false)
   const [text, setText] = useState('')
   const { startRecording, stopRecording, isRecording, recordingBlob } = useAudioRecorder()
+
+  const loading = transcribeLoading || speechLoading
 
   const click = () => {
     if (!isRecording) {
@@ -40,51 +45,85 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     setCanceled(true)
   }
 
-  const undo = () => {
+  const undo = async () => {
     if (loading) return
     if (isRecording) return
     if (messages.length < 2) return
 
-    setLoading(true)
-    messages.slice(-2).map(item => item.id && destroy(`messages/${item.id}`))
-    setLoading(false)
-    setMessages(messages.slice(0, -2))
+    await destroy(`messages/${messages[messages.length - 1].id}`)
+
+    if (messages[messages.length - 2]?.role === 'user') {
+      await destroy(`messages/${messages[messages.length - 2].id}`)
+      setMessages(messages.slice(0, -2))
+    } else {
+      setMessages(messages.slice(0, -1))
+    }
   }
 
-  const talk = async () => {
-    if (loading) return
+  const reason = async () => {
+    if (speechLoading) return
 
-    setLoading(true)
+    setSpeechLoading(true)
+    setAutoPlay(true)
+
+    const message = await post(`npcs/${activeNpc.id}/reason`)
+
+    setSpeechLoading(false)
+    return message
+  }
+
+  const transcribe = async () => {
+    if (transcribeLoading) return
+
+    setTranscribeLoading(true)
     const formData = new FormData()
     formData.append('audio_data', recordingBlob, 'file')
     formData.append('type', 'webm')
 
-    const data = await post(`npcs/${activeNpc.id}/talk`, formData, {
+    const userMessage = await post(`npcs/${activeNpc.id}/transcribe`, formData, {
       setContentType: false,
       stringifyBody: false,
     })
 
-    setLoading(false)
-    setAutoPlay(true)
-    setMessages([...messages, ...data])
+    setTranscribeLoading(false)
+    setMessages([...messages, userMessage])
+    const systemMessage = await reason()
+    setMessages([...messages, userMessage, systemMessage])
   }
 
   const dialog = async () => {
     if (text.length === 0) return
     if (loading) return
 
-    setLoading(true)
+    setTranscribeLoading(true)
 
-    const data = await post(`npcs/${activeNpc.id}/dialog`, { text })
+    const userMessage = await post(`messages`, { text, npc_id: activeNpc.id })
 
-    setLoading(false)
+    setTranscribeLoading(false)
     setText('')
+    setMessages([...messages, userMessage])
+    const systemMessage = await reason()
+    setMessages([...messages, userMessage, systemMessage])
+  }
+
+  const regenerate = async () => {
+    if (speechLoading) return
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage.role === 'system') return
+
+    setSpeechLoading(true)
     setAutoPlay(true)
-    setMessages([...messages, ...data])
+    const slicedMessages = messages.slice(0, lastMessage.role === 'assistant' ? -1 : Infinity)
+    setMessages(slicedMessages)
+
+    const message = await post(`npcs/${activeNpc.id}/regenerate`)
+
+    setSpeechLoading(false)
+    setMessages([...slicedMessages, message])
   }
 
   useEffect(() => {
-    if (recordingBlob && !canceled && activeNpc?.id) talk()
+    if (recordingBlob && !canceled && activeNpc?.id) transcribe()
   }, [recordingBlob])
 
   useEffect(() => {
@@ -102,8 +141,8 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
   return <div className={wrapperClass}>
     <div className="buttons-container flex flex-row justify-center items-center gap-16">
       <IconButton Icon={Back} onClick={undo} disabled={loading || isRecording || messages.length === 0} buttonClass="w-8" />
-      <IconButton Icon={isRecording ? Stop : Play} onClick={click} disabled={loading} buttonClass="w-16" />
-      <IconButton Icon={Trash} onClick={cancel} disabled={loading || !isRecording} buttonClass="w-8" />
+      <IconButton Icon={isRecording ? Stop : Circle} onClick={click} disabled={loading || messages[messages.length - 1]?.role === 'user'} buttonClass="w-16 h-16" />
+      <IconButton Icon={isRecording ? Trash : Cycle} onClick={isRecording ? cancel : regenerate} disabled={loading} buttonClass="w-8" />
     </div>
 
     <div className="messages-wrapper pr-6 w-full h-[65vh] overflow-y-scroll flex justify-center">
@@ -116,6 +155,8 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
               autoPlay={autoPlay}
             />
           )}
+          {transcribeLoading && <IconButton Icon={Loading} buttonClass="self-end" />}
+          {speechLoading && <IconButton Icon={Loading} />}
         </div>
       </div>
     </div>
