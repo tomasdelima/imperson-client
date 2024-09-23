@@ -1,18 +1,21 @@
 const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
   const active = npc.id === activeNpc?.id
 
-  let imgClass = 'transition-all hover:transition-all cursor-pointer rounded-full object-cover ring-offset-[#282c34]'
+  let wrapperClass = 'flex items-center justify-center transition-all hover:transition-all cursor-pointer rounded-full ring-offset-[#282c34]'
+  let imgClass = 'object-cover rounded-full'
 
   if (active) {
-    imgClass += ' ring ring-slate-100'
+    wrapperClass += ' ring ring-slate-100'
   } else {
-    imgClass += ' hover:ring-slate-500'
+    wrapperClass += ' hover:ring-slate-500'
   }
 
   if (activeNpc?.id) {
-    imgClass += ' h-16 w-16 m-1 ring-offset-4 hover:ring'
+    wrapperClass += ' h-16 w-16 m-1 ring-offset-4 hover:ring text-3xl'
+    imgClass += ' h-16 w-16'
   } else {
-    imgClass += ' h-40 w-40 m-4 ring-offset-8 hover:ring-8'
+    wrapperClass += ' h-40 w-40 m-4 ring-offset-8 hover:ring-8 text-6xl'
+    imgClass += ' h-40 w-40'
   }
 
   let spanClass = 'hover:underline cursor-pointer'
@@ -31,12 +34,15 @@ const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
   }
 
   return <div className='flex flex-col items-center'>
-    <img
-      onClick={click}
-      className={imgClass}
-      alt={npc.name}
-      src={npc.portrait}
-    />
+    <div className={wrapperClass} onClick={click}>
+      {npc.portrait ? <img
+        className={imgClass}
+        alt={npc.name}
+        src={npc.portrait}
+      /> : <span className=''>
+        {npc.name.split(' ').slice(0, 2).map(n => n && n[0])}
+      </span>}
+    </div>
     <div
       className={spanClass}
       onClick={edit}

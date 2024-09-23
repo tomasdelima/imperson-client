@@ -50,6 +50,20 @@ const ChooseNpc = () => {
     race: '',
     job: '',
     greet: '',
+    alignment: '',
+
+    extraversion: 3,
+    agreeableness: 3,
+    conscientiousness: 3,
+    neuroticism: 3,
+    openness_to_experience: 3,
+
+    tone: '',
+    empathy: 3,
+    verbosity: 3,
+    humor: 3,
+    formality: 3,
+
     language: '',
     voice: '',
   })
