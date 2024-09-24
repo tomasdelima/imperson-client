@@ -46,7 +46,7 @@ const SelectField = ({ field, label, value, onChange, options }) => {
 
   return <div className="flex flex-row gap-16">
     <Label field={label ?? field} required={requiredFields.includes(field)} />
-    <select className="w-80 p-2 text-[#282c34]" value={value} onChange={onChange}>
+    <select className="w-80 p-2 pl-1 text-[#282c34]" value={value} onChange={onChange}>
       {options.map((option) => <option key={option[0]} value={option[0]}>
         {option[1].charAt(0).toUpperCase() + option[1].slice(1)}
       </option>)}
@@ -54,10 +54,31 @@ const SelectField = ({ field, label, value, onChange, options }) => {
   </div>
 }
 
+const skills = [
+  'acrobatics',
+  'animal handling',
+  'arcana',
+  'athletics',
+  'deception',
+  'history',
+  'insight',
+  'intimidation',
+  'investigation',
+  'medicine',
+  'nature',
+  'perception',
+  'performance',
+  'persuasion',
+  'religion',
+  'sleight of hand',
+  'stealth',
+  'survival',
+]
+
 const InformationForm = ({ index, information, updateField, deleteInformation }) => {
   return <div className="flex flex-col">
     <TextField field="condition" label="If" value={information.condition} onChange={(e) => updateField(index, 'condition', e)} />
-    <TextField field="check" label="Ask for a(n)" value={information.check} onChange={(e) => updateField(index, 'check', e)} />
+    <SelectField field="check" label="Ask for a(n)" value={information.check} onChange={(e) => updateField(index, 'check', e)} options={skills} />
     <TextField field="difficulty" label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} />
     <TextField field="success" label="On success" value={information.success} onChange={(e) => updateField(index, 'success', e)} />
     <TextField field="failure" label="On failure" value={information.failure} onChange={(e) => updateField(index, 'failure', e)} />
@@ -73,7 +94,7 @@ const allVoices = {
 
 const requiredFields = ['name', 'language', 'voice']
 
-const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
+const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) => {
   const [pressedDelete, setPressedDelete] = useState(0)
   const voices = allVoices[npc.gender || 'other']
 
@@ -93,6 +114,7 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
     }
 
     setNpcForm(null)
+    fetchNpcs()
   }
 
   const deleteNpc = async () => {
@@ -104,6 +126,7 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
     await destroy(`npcs/${npc.id}`)
     setNpcs(npcs.filter((n) => n.id !== npc.id))
     setNpcForm(null)
+    setActiveNpc(null)
   }
 
   const addInformation = () => {
@@ -158,7 +181,6 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs }) => {
 
         <TextField field="race" value={npc.race} onChange={(e) => change('race', e)} />
         <TextField field="job" value={npc.job} onChange={(e) => change('job', e)} />
-        {/* <TextField field="greet" value={npc.greet} onChange={(e) => change('greet', e)} /> */}
         <TextField field="portrait" value={npc.portrait} onChange={(e) => change('portrait', e)} />
         <SelectField field="alignment" value={npc.alignment} onChange={(e) => change('alignment', e)} options={aligments} />
 

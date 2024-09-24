@@ -49,7 +49,6 @@ const ChooseNpc = () => {
     gender: '',
     race: '',
     job: '',
-    greet: '',
     alignment: '',
 
     extraversion: 3,
@@ -69,7 +68,7 @@ const ChooseNpc = () => {
   })
 
   return <div className='flex flex-col flex-grow justify-start items-stretch gap-8'>
-    <div className="flex flex-row justify-center gap-4">
+    <div className='flex flex-row gap-4 overflow-x-auto p-1 pb-4 justify-center flex-wrap'>
       {npcs.map(npc =>
         <NpcAvatar
           key={npc.id}
@@ -80,13 +79,15 @@ const ChooseNpc = () => {
         />
       )}
 
-      <div className={newNpcWrapperClass} onClick={() => {}}>
+      <div className={newNpcWrapperClass}>
         <IconButton buttonClass={activeNpc ? 'w-8' : 'w-16'} Icon={Plus} onClick={addNpc} />
         {newNpc && <NpcForm
           npc={newNpc}
           npcs={npcs}
           setNpcForm={setNpcForm}
           setNpcs={setNpcs}
+          fetchNpcs={fetchNpcs}
+          setActiveNpc={setActiveNpc}
         />}
       </div>
     </div>

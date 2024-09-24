@@ -11,7 +11,7 @@ const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
   }
 
   if (activeNpc?.id) {
-    wrapperClass += ' h-16 w-16 m-1 ring-offset-4 hover:ring text-3xl'
+    wrapperClass += ' h-16 w-16 m-1 ring-offset-4 hover:ring text-2xl'
     imgClass += ' h-16 w-16'
   } else {
     wrapperClass += ' h-40 w-40 m-4 ring-offset-8 hover:ring-8 text-6xl'
@@ -40,7 +40,7 @@ const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
         alt={npc.name}
         src={npc.portrait}
       /> : <span className=''>
-        {npc.name.split(' ').slice(0, 2).map(n => n && n[0])}
+        {npc.name.split(' ').slice(0, 3).map(n => n && n[0])}
       </span>}
     </div>
     <div

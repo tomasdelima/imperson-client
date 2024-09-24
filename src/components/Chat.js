@@ -4,6 +4,7 @@ import { useAudioRecorder } from 'react-audio-voice-recorder'
 import Message from './Message'
 import IconButton from './IconButton'
 import Back from './Back'
+import Button from './Button'
 import Circle from './Circle'
 import Cycle from './Cycle'
 import Loading from './Loading'
@@ -91,13 +92,15 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     setMessages([...messages, userMessage, systemMessage])
   }
 
-  const dialog = async () => {
-    if (text.length === 0) return
+  const dialog = async (manualText) => {
+    const theText = manualText || text
+
+    if (theText.length === 0) return
     if (loading) return
 
     setTranscribeLoading(true)
 
-    const userMessage = await post(`messages`, { text, npc_id: activeNpc.id })
+    const userMessage = await post(`messages`, { text: theText, npc_id: activeNpc.id })
 
     setTranscribeLoading(false)
     setText('')
@@ -106,9 +109,11 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
     setMessages([...messages, userMessage, systemMessage])
   }
 
+  const lastMessage = messages[messages.length - 1]
+  const showReplyButtons = lastMessage?.ask_for_check && lastMessage?.role == 'assistant'
+
   const regenerate = async () => {
     if (speechLoading) return
-    const lastMessage = messages[messages.length - 1]
     if (lastMessage.role === 'system') return
 
     setSpeechLoading(true)
@@ -145,7 +150,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
       <IconButton Icon={isRecording ? Trash : Cycle} onClick={isRecording ? cancel : regenerate} disabled={loading} buttonClass="w-8" />
     </div>
 
-    <div className="messages-wrapper pr-6 w-full h-[65vh] overflow-y-scroll flex justify-center">
+    <div className={'messages-wrapper pr-6 w-full overflow-y-scroll flex justify-center ' + (showReplyButtons ? 'h-[57vh]' : 'h-[65vh]')}>
       <div className="flex flex-grow flex-col">
         <div className="flex flex-grow flex-col justify-end items-stretch">
           {messages.map((item, index) =>
@@ -161,6 +166,10 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
       </div>
     </div>
 
+    {showReplyButtons && <div className="flex flex-row justify-end self-stretch gap-8">
+      <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Failure')} label='Failure' classes='mt-0 hover:bg-gray-700' />
+      <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Success')} label='Success' classes='mt-0 hover:bg-gray-700' />
+    </div>}
     <div className="flex flex-row items-center self-stretch gap-8">
       <input
         className="m-1 px-2 py-1 grow text-[#282c34]"
