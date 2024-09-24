@@ -11,12 +11,12 @@ const TextField = ({ label, value, type, onChange }) => {
   </div>
 }
 
-const Login = () => {
+const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const login = async () => {
+  const signIn = async () => {
     const { auth_token: authToken } = await post('sessions', { email, password })
     localStorage.setItem('authToken', authToken)
     navigate('/')
@@ -26,8 +26,12 @@ const Login = () => {
     <TextField label="Email" type="text" value={email} onChange={setEmail} />
     <TextField label="Password" type="password" value={password} onChange={setPassword} />
 
-    <Button label="Save" onClick={login} />
+    <Button label="Enter" onClick={signIn} />
+
+    <span>
+      Don't have an account? <a href="/sign-up" className="underline">Sign up</a>
+    </span>
   </div>
 }
 
-export default Login
+export default SignIn

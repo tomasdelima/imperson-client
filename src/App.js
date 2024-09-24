@@ -7,7 +7,9 @@ import {
 } from 'react-router-dom'
 
 import ChooseNpc from './components/ChooseNpc.js'
-import Login from './components/Login.js'
+import SignIn from './components/SignIn.js'
+import SignUp from './components/SignUp.js'
+import SignOut from './components/SignOut.js'
 
 const router = createBrowserRouter([
   {
@@ -15,8 +17,16 @@ const router = createBrowserRouter([
     element: <ChooseNpc />,
   },
   {
-    path: '/login',
-    element: <Login />,
+    path: '/sign-in',
+    element: <SignIn />,
+  },
+  {
+    path: '/sign-up',
+    element: <SignUp />,
+  },
+  {
+    path: '/sign-out',
+    element: <SignOut />,
   },
 ])
 
