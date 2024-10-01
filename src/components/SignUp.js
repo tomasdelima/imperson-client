@@ -19,7 +19,7 @@ const SignUp = () => {
   const navigate = useNavigate()
 
   const signUp = async () => {
-    if (password != passwordConfirmation) {
+    if (password !== passwordConfirmation) {
       alert('Password and password confirmation do not match')
       return
     }
@@ -36,7 +36,7 @@ const SignUp = () => {
     <TextField label="Password" type="password" value={password} onChange={setPassword} />
     <TextField label="Confirm Password" type="password" value={passwordConfirmation} onChange={setPasswordConfirmation} />
 
-    <Button label="Join" onClick={signUp} />
+    <Button label="Join" onClick={signUp} buttonClass="m-8" />
 
     <span>
       Already have an account? <a href="/sign-in" className="underline">Sign in.</a>

@@ -26,7 +26,7 @@ const SignIn = () => {
     <TextField label="Email" type="text" value={email} onChange={setEmail} />
     <TextField label="Password" type="password" value={password} onChange={setPassword} />
 
-    <Button label="Enter" onClick={signIn} />
+    <Button label="Enter" onClick={signIn} buttonClass="m-8" />
 
     <span>
       Don't have an account? <a href="/sign-up" className="underline">Sign up</a>

@@ -110,7 +110,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
   }
 
   const lastMessage = messages[messages.length - 1]
-  const showReplyButtons = lastMessage?.ask_for_check && lastMessage?.role == 'assistant'
+  const showReplyButtons = lastMessage?.ask_for_check && lastMessage?.role === 'assistant'
 
   const regenerate = async () => {
     if (speechLoading) return
@@ -129,6 +129,7 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
 
   useEffect(() => {
     if (recordingBlob && !canceled && activeNpc?.id) transcribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordingBlob])
 
   useEffect(() => {

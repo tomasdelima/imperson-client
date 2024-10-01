@@ -21,12 +21,12 @@ const TextField = ({ field, label, value, onChange }) => {
   </div>
 }
 
-const LongTextField = ({ field, label, value, onChange }) => {
-  return <div className="flex flex-row gap-16">
-    <Label field={label ?? field} required={requiredFields.includes(field)} />
-    <textarea className="w-80 p-2 text-[#282c34]" value={value || ''} onChange={onChange} />
-  </div>
-}
+// const LongTextField = ({ field, label, value, onChange }) => {
+//   return <div className="flex flex-row gap-16">
+//     <Label field={label ?? field} required={requiredFields.includes(field)} />
+//     <textarea className="w-80 p-2 text-[#282c34]" value={value || ''} onChange={onChange} />
+//   </div>
+// }
 
 const RangeField = ({ field, label, min=0, max=10, step=1, value, onChange }) => {
   return <div className="flex flex-row gap-16">
@@ -82,7 +82,7 @@ const InformationForm = ({ index, information, updateField, deleteInformation })
     <TextField field="difficulty" label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} />
     <TextField field="success" label="On success" value={information.success} onChange={(e) => updateField(index, 'success', e)} />
     <TextField field="failure" label="On failure" value={information.failure} onChange={(e) => updateField(index, 'failure', e)} />
-    <Button label="Delete Information" onClick={() => deleteInformation(index, information.id)} variant="danger" />
+    <Button label="Delete Information" onClick={() => deleteInformation(index, information.id)} variant="danger" buttonClass="mt-8" />
   </div>
 }
 
@@ -127,6 +127,11 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
     setNpcs(npcs.filter((n) => n.id !== npc.id))
     setNpcForm(null)
     setActiveNpc(null)
+  }
+
+  let deleteLabel = 'Delete'
+  if (pressedDelete) {
+    deleteLabel += ` (click ${3 - pressedDelete} time${pressedDelete < 2 ? 's' : ''})`
   }
 
   const addInformation = () => {
@@ -208,14 +213,19 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
           deleteInformation={deleteInformation}
         />)}
 
-        <Button label="Add Information" onClick={addInformation} />
+        <Button label="Add Information" onClick={addInformation} buttonClass="mt-8" />
 
-        <div className="flex flex-row gap-8">
+        <div className="flex flex-row gap-8 my-8">
           <Button label="Cancel" onClick={() => setNpcForm(null)} />
           <Button label="Save" onClick={save} />
         </div>
 
-        {npc.id && <Button label="Delete" onClick={deleteNpc} variant="danger" />}
+        {npc.id && <Button
+          label={deleteLabel}
+          onClick={deleteNpc}
+          variant="danger"
+          buttonClass="min-w-56"
+        />}
       </div>
     </div>
   </div>

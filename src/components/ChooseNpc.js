@@ -32,6 +32,7 @@ const ChooseNpc = () => {
 
   useEffect(() => {
     fetchMessages()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNpc])
 
   let newNpcWrapperClass = 'p-3 flex justify-center items-center'

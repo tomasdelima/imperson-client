@@ -21,10 +21,9 @@ const Message = ({ item, autoPlay }) => {
     ref.current.audioEl.current.pause()
   }
 
-  let wrapperClass = 'max-w-6xl break-words flex items-center gap-4 mb-8 '
-  wrapperClass += item.role === 'user' ? 'flex-row-reverse self-end' : 'flex-row self-start'
-
   const isAssistant = item.role === 'assistant'
+  let wrapperClass = 'max-w-6xl w-5/6 break-words flex items-center gap-4 mb-8 '
+  wrapperClass += isAssistant ? 'flex-row self-start' : 'flex-row-reverse self-end'
 
   let durationsClass = 'text-sm text-gray-500 whitespace-nowrap absolute top-full '
   durationsClass += isAssistant ? 'left-0' : 'right-0'
