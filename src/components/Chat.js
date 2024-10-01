@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
 
-import Message from './Message'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 import IconButton from './IconButton'
-import Back from './Back'
-import Button from './Button'
-import Circle from './Circle'
-import Cycle from './Cycle'
 import Loading from './Loading'
-import Send from './Send'
-import Stop from './Stop'
-import Trash from './Trash'
+import Message from './Message'
+
+import ArrowBack from '@mui/icons-material/ArrowBack'
+import Cached from '@mui/icons-material/Cached'
+import Delete from '@mui/icons-material/Delete'
+import FiberManualRecord from '@mui/icons-material/FiberManualRecord'
+import Send from '@mui/icons-material/Send'
+import Stop from '@mui/icons-material/Stop'
+
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
 
@@ -146,12 +149,12 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
 
   return <div className={wrapperClass}>
     <div className="buttons-container flex flex-row justify-center items-center gap-16">
-      <IconButton Icon={Back} onClick={undo} disabled={loading || isRecording || messages.length === 0} buttonClass="w-8" />
-      <IconButton Icon={isRecording ? Stop : Circle} onClick={click} disabled={loading || messages[messages.length - 1]?.role === 'user'} buttonClass="w-16 h-16" />
-      <IconButton Icon={isRecording ? Trash : Cycle} onClick={isRecording ? cancel : regenerate} disabled={loading} buttonClass="w-8" />
+      <IconButton Icon={ArrowBack} onClick={undo} disabled={loading || isRecording || messages.length === 0} buttonClass="w-8" />
+      <IconButton Icon={isRecording ? Stop : FiberManualRecord} onClick={click} disabled={loading || messages[messages.length - 1]?.role === 'user'} buttonClass="w-16 h-16" />
+      <IconButton Icon={isRecording ? Delete : Cached} onClick={isRecording ? cancel : regenerate} disabled={loading} buttonClass="w-8" />
     </div>
 
-    <div className={'messages-wrapper pr-6 w-full overflow-y-scroll flex justify-center ' + (showReplyButtons ? 'h-[57vh]' : 'h-[65vh]')}>
+    <div className={'messages-wrapper pr-6 w-full overflow-y-scroll flex justify-center ' + (showReplyButtons ? 'h-[52vh]' : 'h-[60vh]')}>
       <div className="flex flex-grow flex-col">
         <div className="flex flex-grow flex-col justify-end items-stretch">
           {messages.map((item, index) =>
@@ -161,8 +164,10 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
               autoPlay={autoPlay}
             />
           )}
-          {transcribeLoading && <IconButton Icon={Loading} buttonClass="self-end" />}
-          {speechLoading && <IconButton Icon={Loading} />}
+
+          {(transcribeLoading || speechLoading) && <div className={transcribeLoading && 'flex justify-end'}>
+            <Loading />
+          </div>}
         </div>
       </div>
     </div>
@@ -172,12 +177,15 @@ const Chat = ({ activeNpc, messages, setMessages }) => {
       <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Success')} label='Success' classes='mt-0 hover:bg-gray-700' />
     </div>}
     <div className="flex flex-row items-center self-stretch gap-8">
-      <input
-        className="m-1 px-2 py-1 grow text-[#282c34]"
+      <TextField
+        sx={{ flexGrow: 1 }}
         value={text}
         onChange={e => setText(e.target.value)}
         onKeyDown={handleKeyDown}
+        variant='outlined'
+        size='small'
       />
+
       <IconButton
         Icon={Send}
         onClick={dialog}

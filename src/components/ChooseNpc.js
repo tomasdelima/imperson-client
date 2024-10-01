@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 
 import NpcAvatar from './NpcAvatar'
 import Chat from './Chat.js'
-import Plus from './Plus.js'
 import IconButton from './IconButton.js'
 import NpcForm from './NpcForm.js'
+
+import Plus from '@mui/icons-material/Add'
 
 import get from '../utils/get.js'
 

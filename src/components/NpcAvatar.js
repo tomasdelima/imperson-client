@@ -1,13 +1,13 @@
 const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
   const active = npc.id === activeNpc?.id
 
-  let wrapperClass = 'flex items-center justify-center transition-all hover:transition-all cursor-pointer rounded-full ring-offset-[#282c34]'
+  let wrapperClass = 'flex items-center justify-center transition-all hover:transition-all cursor-pointer rounded-full'
   let imgClass = 'object-cover rounded-full'
 
   if (active) {
-    wrapperClass += ' ring ring-slate-100'
+    wrapperClass += ' ring ring-slate-500'
   } else {
-    wrapperClass += ' hover:ring-slate-500'
+    wrapperClass += ' hover:ring-slate-200'
   }
 
   if (activeNpc?.id) {

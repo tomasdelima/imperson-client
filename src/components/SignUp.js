@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Button from './Button.js'
 import post from '../utils/post.js'
+
+import Button from '@mui/material/Button'
 
 const TextField = ({ label, value, type, onChange }) => {
   return <div className="flex flex-row gap-16">
     <label className="w-40 leading-10">{label}</label>
-    <input className="w-80 p-2 text-[#282c34]" type={type} value={value} onChange={(e) => onChange(e.target.value)} />
+    <input className="w-80 p-2" type={type} value={value} onChange={(e) => onChange(e.target.value)} />
   </div>
 }
 
@@ -36,7 +37,7 @@ const SignUp = () => {
     <TextField label="Password" type="password" value={password} onChange={setPassword} />
     <TextField label="Confirm Password" type="password" value={passwordConfirmation} onChange={setPasswordConfirmation} />
 
-    <Button label="Join" onClick={signUp} buttonClass="m-8" />
+    <Button onClick={signUp}>Join</Button>
 
     <span>
       Already have an account? <a href="/sign-in" className="underline">Sign in.</a>

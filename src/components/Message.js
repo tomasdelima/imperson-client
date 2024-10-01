@@ -2,8 +2,9 @@ import { useState, useRef } from 'react'
 import ReactAudioPlayer from 'react-audio-player'
 
 import IconButton from './IconButton'
-import Play from './Play'
-import Stop from './Stop'
+
+import Play from '@mui/icons-material/PlayArrow'
+import Stop from '@mui/icons-material/Stop'
 
 const Message = ({ item, autoPlay }) => {
   const[playing, setPlaying] = useState(autoPlay)
@@ -25,7 +26,7 @@ const Message = ({ item, autoPlay }) => {
   let wrapperClass = 'max-w-6xl w-5/6 break-words flex items-center gap-4 mb-8 '
   wrapperClass += isAssistant ? 'flex-row self-start' : 'flex-row-reverse self-end'
 
-  let durationsClass = 'text-sm text-gray-500 whitespace-nowrap absolute top-full '
+  let durationsClass = 'text-sm whitespace-nowrap absolute top-full '
   durationsClass += isAssistant ? 'left-0' : 'right-0'
 
   const durations = [
