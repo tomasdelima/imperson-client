@@ -2,25 +2,28 @@ import { useState } from 'react'
 import { Link } from "react-router-dom"
 
 import IconButton from './IconButton'
-import Menu from '@mui/material/Menu'
+import { Box, Menu, MenuItem } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+
+const Item = ({ to, close, children }) => <Link to={to}>
+  <MenuItem onClick={close}>{children}</MenuItem>
+</Link>
 
 const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const openMenu = (event) => setAnchorEl(event.currentTarget)
-  const closeMenu = () => setAnchorEl(null)
+  const open = (event) => setAnchorEl(event.currentTarget)
+  const close = () => setAnchorEl(null)
 
-  return <div className='my-4 mx-8'>
-    <IconButton Icon={MenuIcon} onClick={openMenu} />
+  return <Box className='my-4 mx-8'>
+    <IconButton Icon={MenuIcon} onClick={open} />
 
-    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={closeMenu}>
-      <MenuItem>
-        <Link to='/sign-out'>Sign out</Link>
-      </MenuItem>
+    <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={close}>
+      <Item to='/' close={close}>Chat</Item>
+      {/* <Item to='/profile' close={close}>Profile</Item> */}
+      <Item to='/sign-out' close={close}>Sign out</Item>
     </Menu>
-  </div>
+  </Box>
 }
 
 export default TopBar

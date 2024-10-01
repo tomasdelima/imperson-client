@@ -10,12 +10,15 @@ import upcaseFirst from '../utils/upcaseFirst.js'
 
 const requiredFields = ['name', 'language', 'voice']
 
-const TextField = ({ field, label, variant = 'outlined', multiline, value, onChange }) => {
+const TextField = ({ field, label, variant = 'outlined', multiline, value, onChange, numeric, password }) => {
+  const type = numeric ? 'number' : password ? 'password' : null
+
   return <MaterialTextField
     label={upcaseFirst(label ?? field)}
     value={value || ''}
     onChange={onChange}
     variant={variant}
+    type={type}
     size='medium'
     multiline={multiline}
     rows={4}
@@ -65,7 +68,18 @@ const elements = {
   range: RangeField,
 }
 
-const Field = ({ field, label, type = 'text', value, variant, onChange, options, multiline }) => {
+const Field = ({
+  field,
+  label,
+  type = 'text',
+  value,
+  variant,
+  onChange,
+  options,
+  multiline,
+  numeric,
+  password,
+ }) => {
   const Element = elements[type]
   const error = requiredFields.includes(field) ? '*' : ''
   const elementLabel = upcaseFirst(label ?? field)
@@ -85,6 +99,8 @@ const Field = ({ field, label, type = 'text', value, variant, onChange, options,
         onChange={onChange}
         multiline={multiline}
         options={options}
+        numeric={numeric}
+        password={password}
       />
     </FormControl>
   </Grid2>

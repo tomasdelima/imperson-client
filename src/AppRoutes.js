@@ -10,11 +10,13 @@ import ChooseNpc from './components/ChooseNpc.js'
 import SignIn from './components/SignIn.js'
 import SignUp from './components/SignUp.js'
 import SignOut from './components/SignOut.js'
+import Profile from './components/Profile.js'
 
 const AppRoutes = () => <BrowserRouter>
   <Routes>
     <Route element={<AppLayout />}>
       <Route path='/' element={<ChooseNpc />} />
+      <Route path='/profile' element={<Profile />} />
     </Route>
 
     <Route path='/sign-in' element={<SignIn />} />

@@ -1,24 +1,67 @@
 import { useState } from 'react'
 
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import Field from './Field.js'
 import Grid2 from '@mui/material/Grid2'
+import InformationForm from './InformationForm.js'
+import Modal from '@mui/material/Modal'
+import Typography from '@mui/material/Typography'
+
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
 import put from '../utils/put.js'
-import Field from './Field.js'
-import InformationForm from './InformationForm.js'
-import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
 
-const allVoices = {
-  female: ['alloy', 'nova', 'shimmer'],
-  male: ['echo', 'onyx', 'fable'],
-  other: ['alloy', 'fable', 'nova', 'shimmer', 'echo', 'onyx'],
+const voices = {
+  alloy: 'alloy (f)',
+  fable: 'fable (m)',
+  nova: 'nova (f)',
+  shimmer: 'shimmer (f)',
+  echo: 'echo (m)',
+  onyx: 'onyx (m)',
 }
+
+const aligments = {
+  LG: 'Lawful good',
+  NG: 'Neutral good',
+  CG: 'Chaotic good',
+  LN: 'Lawful neutral',
+  N: 'True neutral',
+  CN: 'Chaotic neutral',
+  LE: 'Lawful evil',
+  NE: 'Neutral evil',
+  CE: 'Chaotic evil',
+}
+
+const fieldColumns = [
+  [
+    { field: 'name', type: 'text' },
+    { field: 'language', type: 'select', options: { en: 'english', pt: 'portuguese'} },
+    { field: 'voice', type: 'select', options: voices },
+    { field: 'gender', type: 'select', options: ['male', 'female', 'other'] },
+  ], [
+    { field: 'race', type: 'text' },
+    { field: 'job', type: 'text' },
+    { field: 'portrait', type: 'text' },
+    { field: 'alignment', type: 'select', options: aligments },
+  ], [
+    { field: 'extraversion', type: 'range' },
+    { field: 'agreeableness', type: 'range' },
+    { field: 'conscientiousness', type: 'range', label: 'Carefulness' },
+    { field: 'neuroticism', type: 'range', label: 'Emotional Reactivity' },
+    { field: 'openness_to_experience', type: 'range', label: 'Openness to Experience' },
+  ], [
+    { field: 'tone', type: 'select', options: ['Authoritative', 'Conservative', 'Edgy', 'Enthusiastic', 'Formal', 'Friendly', 'Informative', 'Irreverent', 'Passionate', 'Professional', 'Romantic', 'Sarcastic', 'Serious'] },
+    { field: 'empathy', type: 'range' },
+    { field: 'verbosity', type: 'range' },
+    { field: 'humor', type: 'range' },
+    { field: 'formality', type: 'range' },
+  ],
+]
 
 const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) => {
   const [pressedDelete, setPressedDelete] = useState(0)
-  const voices = allVoices[npc.gender || 'other']
 
   const change = (field, e) => {
     let updatedNpc = { ...npc }
@@ -35,7 +78,7 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
       setNpcs([...npcs, data])
     }
 
-    setNpcForm(null)
+    setNpcForm({})
     fetchNpcs()
   }
 
@@ -47,7 +90,7 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
 
     await destroy(`npcs/${npc.id}`)
     setNpcs(npcs.filter((n) => n.id !== npc.id))
-    setNpcForm(null)
+    setNpcForm({})
     setActiveNpc(null)
   }
 
@@ -81,51 +124,11 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
     setNpcForm(updatedNpc)
   }
 
-  const aligments = {
-    LG: 'Lawful good',
-    NG: 'Neutral good',
-    CG: 'Chaotic good',
-    LN: 'Lawful neutral',
-    N: 'True neutral',
-    CN: 'Chaotic neutral',
-    LE: 'Lawful evil',
-    NE: 'Neutral evil',
-    CE: 'Chaotic evil',
-  }
-
-  const fieldColumns = [
-    [
-      { field: 'name', type: 'text' },
-      { field: 'language', type: 'select', options: { en: 'english', pt: 'portuguese'} },
-      { field: 'gender', type: 'select', options: ['male', 'female', 'other'] },
-      { field: 'voice', type: 'select', options: voices },
-    ], [
-      { field: 'race', type: 'text' },
-      { field: 'job', type: 'text' },
-      { field: 'portrait', type: 'text' },
-      { field: 'alignment', type: 'select', options: aligments },
-    ], [
-      { field: 'extraversion', type: 'range' },
-      { field: 'agreeableness', type: 'range' },
-      { field: 'conscientiousness', type: 'range', label: 'Carefulness' },
-      { field: 'neuroticism', type: 'range', label: 'Emotional Reactivity' },
-      { field: 'openness_to_experience', type: 'range', label: 'Openness to Experience' },
-    ], [
-      { field: 'tone', type: 'select', options: ['Authoritative', 'Conservative', 'Edgy', 'Enthusiastic', 'Formal', 'Friendly', 'Informative', 'Irreverent', 'Passionate', 'Professional', 'Romantic', 'Sarcastic', 'Serious'] },
-      { field: 'empathy', type: 'range' },
-      { field: 'verbosity', type: 'range' },
-      { field: 'humor', type: 'range' },
-      { field: 'formality', type: 'range' },
-    ],
-  ]
-
-  return <div>
-    <div
-      className="bg-black bg-opacity-50 z-5 fixed top-0 bottom-0 left-0 right-0"
-      onClick={() => setNpcForm(null)}
-    />
-
-    <div className="fixed top-0 bottom-0 left-0 m-20 right-0 z-10 bg-[#d8dcd4] overflow-y-scroll rounded">
+  return <Modal
+    open={Object.keys(npc).length > 0}
+    onClose={() => setNpcForm({})}
+  >
+    <Box className='bg-white justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
       <Grid2 container spacing={4} direction='row' className='p-10'>
         <Grid2 size={12}>
           <Typography variant='h5'>Edit</Typography>
@@ -172,10 +175,10 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
 
       <Divider flexItem />
 
-      <Grid2 container spacing={4} direction='row' className='p-10'>
+      <Grid2 container spacing={4} direction='row' className='px-10 py-6'>
         <Grid2 container spacing={4} direction='row'>
           <Grid2 container direction='column' size={6}>
-            <Button onClick={() => setNpcForm(null)}>Cancel</Button>
+            <Button onClick={() => setNpcForm({})}>Cancel</Button>
           </Grid2>
           <Grid2 container direction='column' size={6}>
             <Button onClick={save}>Save</Button>
@@ -186,8 +189,8 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
           {deleteLabel}
         </Button>}
       </Grid2>
-    </div>
-  </div>
+    </Box>
+  </Modal>
 }
 
 export default NpcForm

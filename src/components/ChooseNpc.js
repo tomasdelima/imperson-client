@@ -12,7 +12,7 @@ import get from '../utils/get.js'
 const ChooseNpc = () => {
   const [activeNpc, setActiveNpc] = useState(null)
   const [npcs, setNpcs] = useState([])
-  const [newNpc, setNpcForm] = useState(null)
+  const [npcForm, setNpcForm] = useState({})
   const [messages, setMessages] = useState([])
 
   const fetchNpcs = async () => {
@@ -83,14 +83,14 @@ const ChooseNpc = () => {
 
       <div className={newNpcWrapperClass}>
         <IconButton buttonClass={activeNpc ? 'w-8' : 'w-16'} Icon={Plus} onClick={addNpc} />
-        {newNpc && <NpcForm
-          npc={newNpc}
+        <NpcForm
+          npc={npcForm}
           npcs={npcs}
           setNpcForm={setNpcForm}
           setNpcs={setNpcs}
           fetchNpcs={fetchNpcs}
           setActiveNpc={setActiveNpc}
-        />}
+        />
       </div>
     </div>
 

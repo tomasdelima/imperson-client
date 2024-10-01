@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
+import Box from '@mui/material/Box'
 import TopBar from './components/TopBar'
-
 import { Outlet } from 'react-router-dom'
+
 import get from './utils/get.js'
 
 const AppLayout = () => {
@@ -20,7 +21,9 @@ const AppLayout = () => {
 
   return <>
     <TopBar user={user} />
-    <Outlet />
+    <Box className='p-8'>
+      <Outlet />
+    </Box>
   </>
 }
 

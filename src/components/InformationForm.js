@@ -34,7 +34,7 @@ const InformationForm = ({ index, information, updateField, deleteInformation })
       <Field type='select' variant='standard' field="check" label="Ask for a(n)" value={information.check} onChange={(e) => updateField(index, 'check', e)} options={skills} />
     </Grid2>
     <Grid2 size={{ xs: 4, md: 3 }}>
-      <Field variant='standard' field="difficulty" label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} />
+      <Field variant='standard' field="difficulty" label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} numeric />
     </Grid2>
     <Grid2 size={{ xs: 12, md: 6 }}>
       <Field variant='standard' field="success" label="On success" value={information.success} onChange={(e) => updateField(index, 'success', e)} />

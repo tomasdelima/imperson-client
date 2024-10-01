@@ -1,16 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import post from '../utils/post.js'
-
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Field from './Field.js'
+import Grid2 from '@mui/material/Grid2'
+import Typography from '@mui/material/Typography'
 
-const TextField = ({ label, value, type, onChange }) => {
-  return <div className="flex flex-row gap-16">
-    <label className="w-40 leading-10">{label}</label>
-    <input className="w-80 p-2" type={type} value={value} onChange={(e) => onChange(e.target.value)} />
-  </div>
-}
+import post from '../utils/post.js'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
@@ -18,21 +15,25 @@ const SignIn = () => {
   const navigate = useNavigate()
 
   const signIn = async () => {
-    const { auth_token: authToken } = await post('sessions', { email, password })
-    localStorage.setItem('authToken', authToken)
-    navigate('/')
+    try {
+      const { auth_token: authToken } = await post('sessions', { email, password })
+      localStorage.setItem('authToken', authToken)
+      navigate('/')
+    } catch {}
   }
 
-  return <div className="h-full flex flex-col justify-center items-center p-16 gap-4">
-    <TextField label="Email" type="text" value={email} onChange={setEmail} />
-    <TextField label="Password" type="password" value={password} onChange={setPassword} />
+  return <Box className="h-full flex flex-col justify-center items-center gap-4">
+    <Grid2 container spacing={4} direction='column'>
+      <Field label="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <Field label="Password" password value={password} onChange={e => setPassword(e.target.value)} />
 
-    <Button onClick={signIn}>Enter</Button>
+      <Button onClick={signIn}>Enter</Button>
 
-    <span>
-      Don't have an account? <a href="/sign-up" className="underline">Sign up</a>
-    </span>
-  </div>
+      <Typography>
+        Don't have an account? <a href="/sign-up" className="underline">Sign up</a>
+      </Typography>
+    </Grid2>
+  </Box>
 }
 
 export default SignIn
