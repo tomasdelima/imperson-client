@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react'
 
 import { Box, Button, TextField } from '@mui/material'
-import ChooseNpc from '../components/ChooseNpc.js'
 import ChatControls from '../components/ChatControls.js'
+import ChooseNpc from '../components/ChooseNpc.js'
 import IconButton from '../components/IconButton.js'
-import Send from '@mui/icons-material/Send'
+import Loading from '../components/Loading.js'
 import Message from '../components/Message'
+import Send from '@mui/icons-material/Send'
 
 import get from '../utils/get.js'
 import post from '../utils/post.js'
 
 const Chat = () => {
   const [activeNpc, setActiveNpc] = useState(null)
-  const [npcs, setNpcs] = useState([])
+  const [autoPlay, setAutoPlay] = useState(false)
   const [messages, setMessages] = useState([])
+  const [npcForm, setNpcForm] = useState({})
+  const [npcs, setNpcs] = useState([])
+  const [speechLoading, setSpeechLoading] = useState(false)
   const [text, setText] = useState('')
   const [transcribeLoading, setTranscribeLoading] = useState(false)
-  const [speechLoading, setSpeechLoading] = useState(false)
-  const [autoPlay, setAutoPlay] = useState(false)
 
   const loading = transcribeLoading || speechLoading
   const lastMessage = messages[messages.length - 1]
@@ -99,60 +101,73 @@ const Chat = () => {
 
   const handleKeyDown = (event) => event.key === 'Enter' && dialog()
 
-  return <Box className='h-full relative flex flex-col justify-between items-center'>
-    <Box className='h-40 z-10'>
+  return <Box className='h-full flex'>
+    <Box className='w-1/3 border-r'>
       <ChooseNpc
-        npcs={npcs}
-        setNpcs={setNpcs}
-        fetchNpcs={fetchNpcs}
         activeNpc={activeNpc}
+        fetchNpcs={fetchNpcs}
+        npcForm={npcForm}
+        npcs={npcs}
         setActiveNpc={setActiveNpc}
         setMessages={setMessages}
-      />
-
-      <ChatControls
-        transcribe={transcribe}
-        messages={messages}
-        setMessages={setMessages}
-        activeNpc={activeNpc}
-        setAutoPlay={setAutoPlay}
+        setNpcForm={setNpcForm}
+        setNpcs={setNpcs}
       />
     </Box>
 
-    <Box
-      sx={{ scrollbarColor: '#0002 transparent', scrollbarWidth: 'thin' }}
-      className='messages-wrapper absolute top-40 bottom-20 overflow-x-scroll left-0 right-0 max-w-4xl m-auto flex flex-col pr-4 gap-4 py-4 pr-8'
-    >
-      {messages.map((item, index) =>
-        <Message
-          key={index}
-          item={item}
-          autoPlay={autoPlay}
+    <Box className='grow h-full relative flex flex-col justify-between items-stretch'>
+      <Box className='h-24 z-10 border-b'>
+        <ChatControls
+          activeNpc={activeNpc}
+          loading={loading}
+          messages={messages}
+          setAutoPlay={setAutoPlay}
+          setMessages={setMessages}
+          setNpcForm={setNpcForm}
+          setSpeechLoading={setSpeechLoading}
+          transcribe={transcribe}
         />
-      )}
+      </Box>
 
-      {showReplyButtons && <div className='flex flex-row justify-end self-stretch gap-8'>
-        <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Failure')} classes='mt-0 hover:bg-gray-700'>Failure</Button>
-        <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Success')} classes='mt-0 hover:bg-gray-700'>Success</Button>
-      </div>}
-    </Box>
+      <Box
+        sx={{ scrollbarColor: '#0002 transparent', scrollbarWidth: 'thin' }}
+        className='messages-wrapper absolute top-24 bottom-20 left-0 right-0 overflow-x-scroll flex flex-col gap-4 py-4 px-8'
+      >
+        {messages.map((item, index) =>
+          <Message
+            key={index}
+            item={item}
+            autoPlay={autoPlay}
+          />
+        )}
 
-    <Box className='h-20 w-full max-w-4xl flex flex-row items-center gap-8'>
-      <TextField
-        className='grow'
-        value={text}
-        onChange={e => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
-        variant='outlined'
-        size='small'
-      />
+        {showReplyButtons && <Box className='flex flex-row justify-end self-stretch gap-8'>
+          <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Failure')}>Failure</Button>
+          <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Success')}>Success</Button>
+        </Box>}
 
-      <IconButton
-        Icon={Send}
-        onClick={() => dialog()}
-        disabled={text.length === 0}
-        buttonClass='w-6'
-      />
+        {loading && <Box className={transcribeLoading && 'flex justify-end'}>
+          <Loading />
+        </Box>}
+      </Box>
+
+      <Box className='h-20 w-full flex flex-row items-center gap-8'>
+        <TextField
+          className='grow'
+          value={text}
+          onChange={e => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          variant='outlined'
+          size='small'
+        />
+
+        <IconButton
+          Icon={Send}
+          onClick={() => dialog()}
+          disabled={text.length === 0}
+          buttonClass='w-6'
+        />
+      </Box>
     </Box>
   </Box>
 }

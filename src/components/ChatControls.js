@@ -2,23 +2,29 @@ import { useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
 
 import IconButton from './IconButton'
-import { Box, TextField } from '@mui/material'
+import { Avatar, Box, Button, Tooltip, Typography } from '@mui/material'
 
 import { ArrowBack, Cached, Delete, FiberManualRecord, Stop } from '@mui/icons-material'
 
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
 
-const Chat = ({ transcribe, messages, setMessages, activeNpc, setAutoPlay }) => {
-  const [transcribeLoading, setTranscribeLoading] = useState(false)
-  const [speechLoading, setSpeechLoading] = useState(false)
+const Chat = ({
+  activeNpc,
+  loading,
+  messages,
+  setAutoPlay,
+  setMessages,
+  setNpcForm,
+  setSpeechLoading,
+  transcribe,
+}) => {
   const [canceled, setCanceled] = useState(true)
   const { startRecording, stopRecording, isRecording, recordingBlob } = useAudioRecorder()
 
-  const loading = transcribeLoading || speechLoading
   const lastMessage = messages[messages.length - 1]
 
-  const click = () => {
+  const record = () => {
     if (!isRecording) {
       setCanceled(false)
       startRecording()
@@ -50,7 +56,7 @@ const Chat = ({ transcribe, messages, setMessages, activeNpc, setAutoPlay }) => 
   }
 
   const regenerate = async () => {
-    if (speechLoading) return
+    if (loading) return
     if (lastMessage.role === 'system') return
 
     setSpeechLoading(true)
@@ -69,14 +75,40 @@ const Chat = ({ transcribe, messages, setMessages, activeNpc, setAutoPlay }) => 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordingBlob])
 
+  const undoDisabled = loading || isRecording || messages.length === 0
+  const recordDisabled = loading || messages[messages.length - 1]?.role === 'user'
+
   useEffect(() => {
     setAutoPlay(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNpc])
 
-  return <Box className="buttons-container flex flex-row justify-center items-center gap-16">
-    <IconButton Icon={ArrowBack} onClick={undo} disabled={loading || isRecording || messages.length === 0} buttonClass="w-8" />
-    <IconButton Icon={isRecording ? Stop : FiberManualRecord} onClick={click} disabled={loading || messages[messages.length - 1]?.role === 'user'} buttonClass="w-16 h-16" />
-    <IconButton Icon={isRecording ? Delete : Cached} onClick={isRecording ? cancel : regenerate} disabled={loading} buttonClass="w-8" />
+  if (!activeNpc) return null
+
+  return <Box className='flex justify-between items-center'>
+    <Box className='flex items-center'>
+      <Avatar src={activeNpc.portrait} className='!h-16 !w-16 m-4' />
+
+
+      <Tooltip title='Edit'>
+        <Button onClick={() => setNpcForm(activeNpc)}>
+          <Typography className='grow text-left' variant='caption1'>
+            {activeNpc.name}
+          </Typography>
+        </Button>
+      </Tooltip>
+    </Box>
+
+    <Box className="flex flex-row justify-center items-center gap-8">
+      <IconButton Icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' />
+      {isRecording ? <>
+        <IconButton Icon={Stop} onClick={record} tooltip='Stop' />
+        <IconButton Icon={Delete} onClick={cancel} disabled={loading} tooltip='Cancel' />
+      </> : <>
+        <IconButton Icon={FiberManualRecord} onClick={record} disabled={recordDisabled} tooltip='Record' />
+        <IconButton Icon={Cached} onClick={regenerate} disabled={loading} tooltip='Regenerate last message' />
+      </>}
+    </Box>
   </Box>
 }
 

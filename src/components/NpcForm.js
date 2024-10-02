@@ -60,7 +60,15 @@ const fieldColumns = [
   ],
 ]
 
-const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) => {
+const NpcForm = ({
+  activeNpc,
+  fetchNpcs,
+  npc,
+  npcs,
+  setActiveNpc,
+  setNpcForm,
+  setNpcs,
+}) => {
   const [pressedDelete, setPressedDelete] = useState(0)
 
   const change = (field, e) => {
@@ -69,13 +77,18 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
     setNpcForm(updatedNpc)
   }
 
+  let response
   const save = async () => {
     if (npc.id) {
-      const data = await put(`npcs/${npc.id}`, npc)
-      setNpcs(npcs.map((n) => n.id === npc.id ? data : n))
+      response = await put(`npcs/${npc.id}`, npc)
+      setNpcs(npcs.map((n) => n.id === npc.id ? response : n))
     } else {
-      const data = await post('npcs', npc)
-      setNpcs([...npcs, data])
+      response = await post('npcs', npc)
+      setNpcs([...npcs, response])
+    }
+
+    if (response.id === activeNpc?.id) {
+      setActiveNpc(response)
     }
 
     setNpcForm({})
@@ -131,7 +144,9 @@ const NpcForm = ({ npc, npcs, setNpcForm, setNpcs, fetchNpcs, setActiveNpc }) =>
     <Box className='bg-white justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
       <Grid2 container spacing={4} direction='row' className='p-10'>
         <Grid2 size={12}>
-          <Typography variant='h5'>Edit</Typography>
+          <Typography variant='h5'>
+            {npc.id ? 'Editing' : 'Creating'} NPC
+          </Typography>
         </Grid2>
 
         {fieldColumns.map((fields, index) =>
