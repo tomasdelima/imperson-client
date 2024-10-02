@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import ReactAudioPlayer from 'react-audio-player'
 
 import IconButton from './IconButton'
+import { Box, Paper, Typography } from '@mui/material'
 
 import Play from '@mui/icons-material/PlayArrow'
 import Stop from '@mui/icons-material/Stop'
@@ -23,11 +24,12 @@ const Message = ({ item, autoPlay }) => {
   }
 
   const isAssistant = item.role === 'assistant'
-  let wrapperClass = 'max-w-6xl w-5/6 break-words flex items-center gap-4 mb-8 '
+  let wrapperClass = 'max-w-6xl w-5/6 break-words flex items-center '
   wrapperClass += isAssistant ? 'flex-row self-start' : 'flex-row-reverse self-end'
 
-  let durationsClass = 'text-sm whitespace-nowrap absolute top-full '
-  durationsClass += isAssistant ? 'left-0' : 'right-0'
+  let durationsClass = 'whitespace-nowrap absolute bottom-1 px-2 text-gray-400 transition-all '
+  durationsClass += isAssistant ? 'left-full' : 'right-full'
+  durationsClass += hover ? ' opacity-100' : ' opacity-0'
 
   const durations = [
     item.transcription_duration,
@@ -35,7 +37,7 @@ const Message = ({ item, autoPlay }) => {
     item.speech_duration
   ].filter((duration) => duration).map((duration) => `${Math.round(duration * 10) / 10}s`).join(' | ')
 
-  return <div
+  return <Box
     className={wrapperClass}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
@@ -50,15 +52,16 @@ const Message = ({ item, autoPlay }) => {
       {playing || <IconButton Icon={Play} onClick={play} buttonClass="w-4 h-5 shrink-0" />}
       {playing && <IconButton Icon={Stop} onClick={stop} buttonClass="w-4 h-5 shrink-0" />}
     </>}
-    <div className="relative">
-      <div className="flex items-center gap-2">
-        {item.content}
-      </div>
-      {durations && hover && <div className={durationsClass}>
+
+    <Box className='relative'>
+      <Paper elevation={1} className='flex items-center px-4 py-2'>
+        <Typography>{item.content}</Typography>
+      </Paper>
+      {durations && <Typography variant='caption' className={durationsClass}>
         ({durations})
-      </div>}
-    </div>
-  </div>
+      </Typography>}
+    </Box>
+  </Box>
 }
 
 export default Message

@@ -21,7 +21,8 @@ const AppLayout = () => {
 
   return <>
     <TopBar user={user} />
-    <Box className='p-8'>
+
+    <Box className='mx-16 h-full'>
       <Outlet />
     </Box>
   </>

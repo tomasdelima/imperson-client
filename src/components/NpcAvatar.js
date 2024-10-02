@@ -1,8 +1,11 @@
-const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
-  const active = npc.id === activeNpc?.id
+import { Avatar, Box, Button, Typography } from '@mui/material'
 
-  let wrapperClass = 'flex items-center justify-center transition-all hover:transition-all cursor-pointer rounded-full'
-  let imgClass = 'object-cover rounded-full'
+const NpcAvatar = ({ npc, setMessages, activeNpc, setActiveNpc, setNpcForm }) => {
+  const active = npc.id === activeNpc?.id
+  const selected = activeNpc?.id
+
+  let wrapperClass = '!rounded-full h-16 w-16 !m-1 ring-offset-4 hover:ring text-2xl'
+  let imgClass = 'transition-all !h-16 !w-16'
 
   if (active) {
     wrapperClass += ' ring ring-slate-500'
@@ -10,20 +13,12 @@ const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
     wrapperClass += ' hover:ring-slate-200'
   }
 
-  if (activeNpc?.id) {
-    wrapperClass += ' h-16 w-16 m-1 ring-offset-4 hover:ring text-2xl'
-    imgClass += ' h-16 w-16'
-  } else {
-    wrapperClass += ' h-40 w-40 m-4 ring-offset-8 hover:ring-8 text-6xl'
-    imgClass += ' h-40 w-40'
-  }
-
-  let spanClass = 'hover:underline cursor-pointer'
-  spanClass += activeNpc?.id ? ' text-sm mt-2' : ''
+  const spanClass = 'hover:underline cursor-pointer text-sm mt-2'
 
   const click = () => {
     if (active) {
       setActiveNpc(null)
+      setMessages([])
     } else {
       setActiveNpc(npc)
     }
@@ -33,23 +28,17 @@ const NpcAvatar = ({ npc, activeNpc, setActiveNpc, setNpcForm }) => {
     setNpcForm(npc)
   }
 
-  return <div className='flex flex-col items-center'>
-    <div className={wrapperClass} onClick={click}>
-      {npc.portrait ? <img
-        className={imgClass}
-        alt={npc.name}
-        src={npc.portrait}
-      /> : <span className=''>
-        {npc.name.split(' ').slice(0, 3).map(n => n && n[0])}
-      </span>}
-    </div>
-    <div
-      className={spanClass}
-      onClick={edit}
-    >
-      {npc.name}
-    </div>
-  </div>
+  return <Box className='flex flex-col items-center'>
+    <Button className={wrapperClass} onClick={click}>
+      <Avatar src={npc.portrait} className={imgClass} />
+    </Button>
+
+    <Box onClick={edit}>
+      <Typography className={spanClass} variant='caption1'>
+        {npc.name}
+      </Typography>
+    </Box>
+  </Box>
 }
 
 export default NpcAvatar

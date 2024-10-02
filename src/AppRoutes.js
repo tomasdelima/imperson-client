@@ -6,16 +6,16 @@ import {
 } from 'react-router-dom'
 
 import AppLayout from './AppLayout.js'
-import ChooseNpc from './components/ChooseNpc.js'
-import SignIn from './components/SignIn.js'
-import SignUp from './components/SignUp.js'
-import SignOut from './components/SignOut.js'
-import Profile from './components/Profile.js'
+import Chat from './pages/Chat.js'
+import SignIn from './pages/SignIn.js'
+import SignUp from './pages/SignUp.js'
+import SignOut from './pages/SignOut.js'
+import Profile from './pages/Profile.js'
 
 const AppRoutes = () => <BrowserRouter>
   <Routes>
     <Route element={<AppLayout />}>
-      <Route path='/' element={<ChooseNpc />} />
+      <Route path='/' element={<Chat />} />
       <Route path='/profile' element={<Profile />} />
     </Route>
 

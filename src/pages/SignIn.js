@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Field from './Field.js'
+import Field from '../components/Field.js'
 import Grid2 from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
 

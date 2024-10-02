@@ -14,7 +14,7 @@ const SignOut = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <div />
+  return null
 }
 
 export default SignOut

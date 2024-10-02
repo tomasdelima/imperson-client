@@ -1,76 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import NpcAvatar from './NpcAvatar'
-import Chat from './Chat.js'
 import IconButton from './IconButton.js'
 import NpcForm from './NpcForm.js'
+import emptyNpc from '../fixtures/npc.json'
 
 import Plus from '@mui/icons-material/Add'
 
-import get from '../utils/get.js'
-
-const ChooseNpc = () => {
-  const [activeNpc, setActiveNpc] = useState(null)
-  const [npcs, setNpcs] = useState([])
+const ChooseNpc = ({ npcs, setNpcs, fetchNpcs, activeNpc, setActiveNpc, setMessages }) => {
   const [npcForm, setNpcForm] = useState({})
-  const [messages, setMessages] = useState([])
 
-  const fetchNpcs = async () => {
-    const response = await get('npcs')
-    setNpcs(response)
-  }
-
-  const fetchMessages = async () => {
-    if (!activeNpc?.id) return
-
-    const response = await get(`messages?npc_id=${activeNpc?.id}`)
-    setMessages(response)
-  }
-
-  useEffect(() => {
-    fetchNpcs()
-  }, [])
-
-  useEffect(() => {
-    fetchMessages()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeNpc])
-
-  let newNpcWrapperClass = 'p-3 flex justify-center items-center'
-  if (activeNpc?.id) {
-    newNpcWrapperClass += ' w-16 h-16 m-1'
-  } else {
-    newNpcWrapperClass += ' h-40 w-40 my-4'
-  }
-
-  const addNpc = () => setNpcForm({
-    id: '',
-    name: '',
-    portrait: '',
-    traits: '',
-    gender: '',
-    race: '',
-    job: '',
-    alignment: '',
-
-    extraversion: 3,
-    agreeableness: 3,
-    conscientiousness: 3,
-    neuroticism: 3,
-    openness_to_experience: 3,
-
-    tone: '',
-    empathy: 3,
-    verbosity: 3,
-    humor: 3,
-    formality: 3,
-
-    language: '',
-    voice: '',
-  })
-
-  return <div className='flex flex-col flex-grow justify-start items-stretch gap-8'>
-    <div className='flex flex-row gap-4 overflow-x-auto p-1 pb-4 justify-center flex-wrap'>
+  return <div className='flex flex-col flex-grow justify-start items-stretch gap-8 h-full.'>
+    <div className='flex flex-row gap-4 shrink-0 overflow-x-auto p-1 justify-center flex-wrap'>
       {npcs.map(npc =>
         <NpcAvatar
           key={npc.id}
@@ -78,11 +19,13 @@ const ChooseNpc = () => {
           activeNpc={activeNpc}
           setActiveNpc={setActiveNpc}
           setNpcForm={setNpcForm}
+          setMessages={setMessages}
         />
       )}
 
-      <div className={newNpcWrapperClass}>
-        <IconButton buttonClass={activeNpc ? 'w-8' : 'w-16'} Icon={Plus} onClick={addNpc} />
+      <div className='p-3 flex justify-center items-center w-16 h-16 m-1'>
+        <IconButton buttonClass='w-8' Icon={Plus} onClick={() => setNpcForm(emptyNpc)} />
+
         <NpcForm
           npc={npcForm}
           npcs={npcs}
@@ -93,12 +36,6 @@ const ChooseNpc = () => {
         />
       </div>
     </div>
-
-    <Chat
-      activeNpc={activeNpc}
-      messages={messages}
-      setMessages={setMessages}
-     />
   </div>
 }
 
