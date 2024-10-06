@@ -5,11 +5,13 @@ const IconButton = ({
   disabled = false,
   Icon,
   onClick,
+  className,
   tooltip,
 }) => {
   const innerButton = <MaterialIconButton
     onClick={onClick}
     disabled={disabled}
+    className={className}
     color={color}
     size='large'
   >

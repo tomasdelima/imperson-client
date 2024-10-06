@@ -1,10 +1,13 @@
 import { createTheme, ThemeProvider } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
 
 const theme = createTheme({
-  primary: { main: '#a00' },
-  typography: {
-    secondary: { main: '#0a0' },
-  }
+  palette: {
+    primary: blueGrey,
+    secondary: blueGrey,
+    primaryBg: blueGrey,
+    secondaryBg: blueGrey,
+  },
 })
 
 const AppTheme = ({ children}) => {

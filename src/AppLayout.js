@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 import Box from '@mui/material/Box'
-import TopBar from './components/TopBar'
 import { Outlet } from 'react-router-dom'
 
 import get from './utils/get.js'
@@ -19,13 +18,9 @@ const AppLayout = () => {
 
   if (!user) return
 
-  return <>
-    <TopBar user={user} />
-
-    <Box className='mx-16 h-full'>
-      <Outlet />
-    </Box>
-  </>
+  return <Box className='h-full'>
+    <Outlet />
+  </Box>
 }
 
 export default AppLayout
