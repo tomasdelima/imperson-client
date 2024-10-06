@@ -5,8 +5,6 @@ const theme = createTheme({
   palette: {
     primary: blueGrey,
     secondary: blueGrey,
-    primaryBg: blueGrey,
-    secondaryBg: blueGrey,
   },
 })
 

@@ -1,13 +1,8 @@
 import { useState } from 'react'
 
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
+import { Box, Button, Divider, Grid2, Modal, Typography } from '@mui/material'
 import Field from './Field.js'
-import Grid2 from '@mui/material/Grid2'
 import InformationForm from './InformationForm.js'
-import Modal from '@mui/material/Modal'
-import Typography from '@mui/material/Typography'
 
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
@@ -61,7 +56,6 @@ const fieldColumns = [
 ]
 
 const NpcForm = ({
-  activeNpc,
   fetchNpcs,
   npc,
   npcs,
@@ -77,8 +71,9 @@ const NpcForm = ({
     setNpcForm(updatedNpc)
   }
 
-  let response
   const save = async () => {
+    let response
+
     if (npc.id) {
       response = await put(`npcs/${npc.id}`, npc)
       setNpcs(npcs.map((n) => n.id === npc.id ? response : n))
@@ -87,11 +82,8 @@ const NpcForm = ({
       setNpcs([...npcs, response])
     }
 
-    if (response.id === activeNpc?.id) {
-      setActiveNpc(response)
-    }
-
-    setNpcForm({})
+    setActiveNpc(response)
+    close()
     fetchNpcs()
   }
 
@@ -109,7 +101,7 @@ const NpcForm = ({
 
   let deleteLabel = 'Delete'
   if (pressedDelete) {
-    deleteLabel += ` (click ${3 - pressedDelete} time${pressedDelete < 2 ? 's' : ''})`
+    deleteLabel += ` (click ${3 - pressedDelete} more time${pressedDelete < 2 ? 's' : ''})`
   }
 
   const addInformation = () => {
@@ -137,9 +129,14 @@ const NpcForm = ({
     setNpcForm(updatedNpc)
   }
 
+  const close = () => {
+    setPressedDelete(0)
+    setNpcForm({})
+  }
+
   return <Modal
     open={Object.keys(npc).length > 0}
-    onClose={() => setNpcForm({})}
+    onClose={close}
   >
     <Box className='bg-white justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
       <Grid2 container spacing={4} direction='row' className='p-10'>
@@ -193,14 +190,14 @@ const NpcForm = ({
       <Grid2 container spacing={4} direction='row' className='px-10 py-6'>
         <Grid2 container spacing={4} direction='row'>
           <Grid2 container direction='column' size={6}>
-            <Button onClick={() => setNpcForm({})}>Cancel</Button>
+            <Button onClick={close}>Cancel</Button>
           </Grid2>
           <Grid2 container direction='column' size={6}>
             <Button onClick={save}>Save</Button>
           </Grid2>
         </Grid2>
 
-        {npc.id && <Button onClick={deleteNpc}>
+        {npc.id && <Button onClick={deleteNpc} color='error'>
           {deleteLabel}
         </Button>}
       </Grid2>

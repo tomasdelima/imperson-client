@@ -85,10 +85,9 @@ const Chat = ({
 
   if (!activeNpc) return null
 
-  return <Box className='flex justify-between items-center'>
+  return <Box className='flex justify-between items-center h-24 z-10 border-b px-4'>
     <Box className='flex items-center'>
       <Avatar src={activeNpc.portrait} className='!h-16 !w-16 m-4' />
-
 
       <Tooltip title='Edit'>
         <Button onClick={() => setNpcForm(activeNpc)}>
@@ -99,7 +98,7 @@ const Chat = ({
       </Tooltip>
     </Box>
 
-    <Box className="flex flex-row justify-center items-center gap-8">
+    <Box className="flex flex-row justify-center items-center gap-4">
       <IconButton Icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' />
       {isRecording ? <>
         <IconButton Icon={Stop} onClick={record} tooltip='Stop' />
