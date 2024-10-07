@@ -19,7 +19,7 @@ const TopBar = () => {
     <IconButton icon={MenuIcon} onClick={open} className='!m-2' />
 
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={close}>
-      <Item to='/' close={close}>Chat</Item>
+      {/* <Item to='/' close={close}>Chat</Item> */}
       {/* <Item to='/profile' close={close}>Profile</Item> */}
       <Item to='/sign-out' close={close}>Sign out</Item>
     </Menu>

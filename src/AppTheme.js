@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material'
-import { blueGrey } from '@mui/material/colors'
+import { blueGrey, grey } from '@mui/material/colors'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 const lightTheme = createTheme({
@@ -10,7 +10,13 @@ const lightTheme = createTheme({
       main: blueGrey[700],
       dark: blueGrey[900],
     },
-    lightPrimary: { main: blueGrey[100] }
+    lightPrimary: { main: blueGrey[100] },
+    background: {
+      default: grey[50],
+    }
+  },
+  typography: {
+    fontSize: 16,
   },
 })
 
@@ -22,7 +28,13 @@ const darkTheme = createTheme({
       main: blueGrey[200],
       dark: blueGrey[900],
     },
-    lightPrimary: { main: blueGrey[100] }
+    lightPrimary: { main: blueGrey[100] },
+    background: {
+      default: grey[900],
+    }
+  },
+  typography: {
+    fontSize: 16,
   },
 })
 

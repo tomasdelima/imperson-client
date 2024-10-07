@@ -10,18 +10,28 @@ import upcaseFirst from '../utils/upcaseFirst.js'
 
 const requiredFields = ['name', 'language', 'voice']
 
-const TextField = ({ field, label, variant = 'outlined', multiline, value, onChange, numeric, password }) => {
+const TextField = ({
+  field,
+  label,
+  multiline,
+  numeric,
+  onChange,
+  password,
+  value,
+  variant = 'outlined',
+}) => {
   const type = numeric ? 'number' : password ? 'password' : null
 
   return <MaterialTextField
+    autoComplete='one-time-code'
     label={upcaseFirst(label ?? field)}
-    value={value || ''}
-    onChange={onChange}
-    variant={variant}
-    type={type}
-    size='medium'
     multiline={multiline}
+    onChange={onChange}
     rows={4}
+    size='medium'
+    type={type}
+    value={value || ''}
+    variant={variant}
   />
 }
 

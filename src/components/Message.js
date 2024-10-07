@@ -54,7 +54,7 @@ const Message = ({ item, autoPlay }) => {
     </>}
 
     <Box className='relative'>
-      <Box elevation={1} className='rounded flex items-center px-4 py-2'>
+      <Box className='rounded flex items-center px-4 py-2 bg-[#8882]'>
         <Typography>{item.content}</Typography>
       </Box>
       {durations && <Typography variant='caption' className={durationsClass}>

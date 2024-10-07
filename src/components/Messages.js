@@ -15,7 +15,7 @@ const Messages = ({ autoPlay, dialog, messages, speechLoading, transcribeLoading
   }, [messages])
 
   return <Box
-    sx={{ scrollbarColor: '#0002 transparent', scrollbarWidth: 'thin' }}
+    sx={{ scrollbarColor: '#8884 transparent', scrollbarWidth: 'thin' }}
     className='messages-wrapper absolute top-24 bottom-0 left-0 right-0 overflow-x-scroll flex flex-col gap-4 py-4 px-8'
   >
     {messages.map((item, index) =>

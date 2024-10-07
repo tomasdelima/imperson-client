@@ -1,4 +1,9 @@
-const Loading = ({ fill }) => {
+import { useTheme } from '@mui/material'
+
+const Loading = () => {
+  const { palette } = useTheme()
+  const fill = palette.text.primary
+
   return <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <circle
       fill={fill}
@@ -7,8 +12,8 @@ const Loading = ({ fill }) => {
       r="3"
     >
       <animate
-        id="spinner_qFRN"
-        begin="0;spinner_OcgL.end+0.25s"
+        id="spinner_1"
+        begin="0;spinner_3.end+0.25s"
         attributeName="cy"
         calcMode="spline"
         dur="0.6s"
@@ -23,7 +28,7 @@ const Loading = ({ fill }) => {
       r="3"
     >
       <animate
-        begin="spinner_qFRN.begin+0.1s"
+        begin="spinner_1.begin+0.1s"
         attributeName="cy"
         calcMode="spline"
         dur="0.6s"
@@ -38,8 +43,8 @@ const Loading = ({ fill }) => {
       r="3"
     >
       <animate
-        id="spinner_OcgL"
-        begin="spinner_qFRN.begin+0.2s"
+        id="spinner_3"
+        begin="spinner_1.begin+0.2s"
         attributeName="cy"
         calcMode="spline"
         dur="0.6s"

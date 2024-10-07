@@ -29,9 +29,9 @@ const SignIn = () => {
 
       <Button onClick={signIn}>Enter</Button>
 
-      <Typography>
+      {/* <Typography>
         Don't have an account? <a href="/sign-up" className="underline">Sign up</a>
-      </Typography>
+      </Typography> */}
     </Grid2>
   </Box>
 }
