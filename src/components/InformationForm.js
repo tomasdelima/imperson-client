@@ -1,7 +1,4 @@
-import { useState } from 'react'
-
-import Button from '@mui/material/Button'
-import Grid2 from '@mui/material/Grid2'
+import { Button, Grid2 } from '@mui/material'
 import Field from './Field.js'
 
 const skills = [
@@ -43,7 +40,7 @@ const InformationForm = ({ index, information, updateField, deleteInformation })
       <Field variant='standard' field="failure" label="On failure" value={information.failure} onChange={(e) => updateField(index, 'failure', e)} />
     </Grid2>
     <Grid2 size={{ xs: 12, md: 6 }}>
-      <Button onClick={() => deleteInformation(index, information.id)}>Delete Information</Button>
+      <Button onClick={() => deleteInformation(index, information.id)} color='error'>Delete Information</Button>
     </Grid2>
   </Grid2>
 }

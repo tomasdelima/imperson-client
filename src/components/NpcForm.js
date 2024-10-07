@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Divider, Grid2, Modal, Typography } from '@mui/material'
+import { Button, Divider, Grid2, Modal, Paper, Typography } from '@mui/material'
 import Field from './Field.js'
 import InformationForm from './InformationForm.js'
 
@@ -138,7 +138,7 @@ const NpcForm = ({
     open={Object.keys(npc).length > 0}
     onClose={close}
   >
-    <Box className='bg-white justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
+    <Paper className='justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
       <Grid2 container spacing={4} direction='row' className='p-10'>
         <Grid2 size={12}>
           <Typography variant='h5'>
@@ -201,7 +201,7 @@ const NpcForm = ({
           {deleteLabel}
         </Button>}
       </Grid2>
-    </Box>
+    </Paper>
   </Modal>
 }
 

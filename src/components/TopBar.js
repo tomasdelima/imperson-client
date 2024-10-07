@@ -16,7 +16,7 @@ const TopBar = () => {
   const close = () => setAnchorEl(null)
 
   return <Box className='mx-8'>
-    <IconButton Icon={MenuIcon} onClick={open} className='!m-2' />
+    <IconButton icon={MenuIcon} onClick={open} className='!m-2' />
 
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={close}>
       <Item to='/' close={close}>Chat</Item>

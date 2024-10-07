@@ -3,7 +3,7 @@ import { Tooltip, IconButton as MaterialIconButton } from '@mui/material'
 const IconButton = ({
   color = 'primary',
   disabled = false,
-  Icon,
+  icon: Icon,
   onClick,
   className,
   tooltip,

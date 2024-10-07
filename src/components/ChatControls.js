@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
+import { useTheme } from '@mui/material'
 
 import IconButton from './IconButton'
-import { Avatar, Box, Button, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 
 import { ArrowBack, Cached, Delete, FiberManualRecord, Stop } from '@mui/icons-material'
 
@@ -21,6 +22,9 @@ const Chat = ({
 }) => {
   const [canceled, setCanceled] = useState(true)
   const { startRecording, stopRecording, isRecording, recordingBlob } = useAudioRecorder()
+  const { palette } = useTheme()
+
+  const boxClass = { background: palette.primary.dark }
 
   const lastMessage = messages[messages.length - 1]
 
@@ -85,27 +89,28 @@ const Chat = ({
 
   if (!activeNpc) return null
 
-  return <Box className='flex justify-between items-center h-24 z-10 border-b px-4'>
+  return <Box
+    className='flex justify-between items-center h-24 z-10 px-4'
+    sx={boxClass}
+  >
     <Box className='flex items-center'>
       <Avatar src={activeNpc.portrait} className='!h-16 !w-16 m-4' />
 
-      <Tooltip title='Edit'>
-        <Button onClick={() => setNpcForm(activeNpc)}>
-          <Typography className='grow text-left' variant='caption1'>
-            {activeNpc.name}
-          </Typography>
-        </Button>
-      </Tooltip>
+      <Button onClick={() => setNpcForm(activeNpc)}>
+        <Typography className='grow text-left' variant='caption1' color='lightPrimary'>
+          {activeNpc.name}
+        </Typography>
+      </Button>
     </Box>
 
     <Box className="flex flex-row justify-center items-center gap-4">
-      <IconButton Icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' />
+      <IconButton icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' color='lightPrimary' />
       {isRecording ? <>
-        <IconButton Icon={Stop} onClick={record} tooltip='Stop' />
-        <IconButton Icon={Delete} onClick={cancel} disabled={loading} tooltip='Cancel' />
+        <IconButton icon={Stop} onClick={record} tooltip='Stop' color='error' />
+        <IconButton icon={Delete} onClick={cancel} disabled={loading} tooltip='Cancel' color='lightPrimary' />
       </> : <>
-        <IconButton Icon={FiberManualRecord} onClick={record} disabled={recordDisabled} tooltip='Record' />
-        <IconButton Icon={Cached} onClick={regenerate} disabled={loading} tooltip='Regenerate last message' />
+        <IconButton icon={FiberManualRecord} onClick={record} disabled={recordDisabled} tooltip='Record' color='error' />
+        <IconButton icon={Cached} onClick={regenerate} disabled={loading} tooltip='Regenerate last message' color='lightPrimary' />
       </>}
     </Box>
   </Box>

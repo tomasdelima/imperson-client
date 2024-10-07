@@ -49,14 +49,14 @@ const Message = ({ item, autoPlay }) => {
         onEnded={() => setPlaying(false)}
         ref={ref}
       />
-      {playing || <IconButton Icon={Play} onClick={play} buttonClass="w-4 h-5 shrink-0" />}
-      {playing && <IconButton Icon={Stop} onClick={stop} buttonClass="w-4 h-5 shrink-0" />}
+      {playing || <IconButton icon={Play} onClick={play} buttonClass="w-4 h-5 shrink-0" />}
+      {playing && <IconButton icon={Stop} onClick={stop} buttonClass="w-4 h-5 shrink-0" />}
     </>}
 
     <Box className='relative'>
-      <Paper elevation={1} className='flex items-center px-4 py-2'>
+      <Box elevation={1} className='rounded flex items-center px-4 py-2'>
         <Typography>{item.content}</Typography>
-      </Paper>
+      </Box>
       {durations && <Typography variant='caption' className={durationsClass}>
         ({durations})
       </Typography>}

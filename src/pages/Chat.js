@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Paper, TextField } from '@mui/material'
+import { Box, Divider, Paper } from '@mui/material'
 import ChatControls from '../components/ChatControls.js'
 import ChooseNpc from '../components/ChooseNpc.js'
-import IconButton from '../components/IconButton.js'
+import DialogInput from '../components/DialogInput.js'
 import Messages from '../components/Messages'
+import NoNpcSelected from '../components/NoNpcSelected.js'
 import TopBar from '../components/TopBar'
-
-import Send from '@mui/icons-material/Send'
 
 import get from '../utils/get.js'
 import post from '../utils/post.js'
@@ -95,10 +94,8 @@ const Chat = () => {
 
   useEffect(() => {
     const element = document.getElementsByClassName('messages-wrapper')[0]
-    element.scrollTo({ top: element.scrollHeight, behavior: 'smooth' })
+    element?.scrollTo({ top: element.scrollHeight, behavior: 'smooth' })
   }, [messages])
-
-  const handleKeyDown = (event) => event.key === 'Enter' && dialog()
 
   return <Box className='h-full flex'>
     <Box className='h-full w-1/2 md:w-1/3 lg:w-1/4 relative'>
@@ -117,45 +114,37 @@ const Chat = () => {
     </Box>
 
     <Box className='grow h-full relative flex flex-col justify-between items-stretch mr-8'>
-      <Paper elevation={4} className='grow h-full relative mt-8'>
-        <ChatControls
-          activeNpc={activeNpc}
-          loading={loading}
-          messages={messages}
-          setAutoPlay={setAutoPlay}
-          setMessages={setMessages}
-          setNpcForm={setNpcForm}
-          setSpeechLoading={setSpeechLoading}
-          transcribe={transcribe}
-        />
+      {activeNpc ? <>
+        <Paper elevation={4} className='grow h-full relative mt-8'>
+          <ChatControls
+            activeNpc={activeNpc}
+            loading={loading}
+            messages={messages}
+            setAutoPlay={setAutoPlay}
+            setMessages={setMessages}
+            setNpcForm={setNpcForm}
+            setSpeechLoading={setSpeechLoading}
+            transcribe={transcribe}
+          />
 
-        <Messages 
-          autoPlay={autoPlay} 
-          dialog={dialog} 
-          messages={messages} 
-          loading={loading} 
-          speechLoading={speechLoading}
-          transcribeLoading={transcribeLoading}
-        />
-      </Paper>
+          <Divider />
 
-      <Box className='h-32 w-full flex flex-row items-center gap-8 bg-stone-100'>
-        <TextField
-          className='grow bg-white rounded'
-          value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          variant='outlined'
-          size='small'
-        />
+          <Messages
+            autoPlay={autoPlay}
+            dialog={dialog}
+            messages={messages}
+            loading={loading}
+            speechLoading={speechLoading}
+            transcribeLoading={transcribeLoading}
+          />
+        </Paper>
 
-        <IconButton
-          Icon={Send}
-          onClick={() => dialog()}
-          disabled={text.length === 0}
-          buttonClass='w-6'
+        <DialogInput
+          dialog={dialog}
+          text={text}
+          setText={setText}
         />
-      </Box>
+      </> : <NoNpcSelected npcs={npcs} setNpcForm={setNpcForm} />}
     </Box>
   </Box>
 }

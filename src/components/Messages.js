@@ -27,8 +27,8 @@ const Messages = ({ autoPlay, dialog, messages, speechLoading, transcribeLoading
     )}
 
     {showReplyButtons && <Box className='flex flex-row justify-end self-stretch gap-8'>
-      <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Failure')}>Failure</Button>
-      <Button className='bg-gray-700 px-4 py-2 rounded' onClick={() => dialog('Success')}>Success</Button>
+      <Button className='px-4 py-2 rounded' onClick={() => dialog('Failure')}>Failure</Button>
+      <Button className='px-4 py-2 rounded' onClick={() => dialog('Success')}>Success</Button>
     </Box>}
 
     {loading && <Box className={transcribeLoading && 'flex justify-end'}>

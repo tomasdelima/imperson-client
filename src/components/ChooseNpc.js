@@ -17,12 +17,21 @@ const ChooseNpc = ({
   return <Box className='flex flex-col flex-grow justify-start items-stretch gap-8 mx-8 overflow-y-auto absolute top-16 bottom-8 left-0 right-0'>
     <Box className='flex flex-col items-stretch shrink-0 overflow-y-auto gap-4'>
       <NpcAvatar
-        npc={{ name: 'Add NPC' }}
+        npc={{ id: 'new', name: 'Add NPC' }}
         activeNpc={activeNpc}
         setActiveNpc={() => setNpcForm(emptyNpc)}
       >
         <Plus />
       </NpcAvatar>
+
+      {npcs.map(npc =>
+        <NpcAvatar
+          key={npc.id}
+          npc={npc}
+          activeNpc={activeNpc}
+          setActiveNpc={setActiveNpc}
+        />
+      )}
 
       <NpcForm
         activeNpc={activeNpc}
@@ -33,15 +42,6 @@ const ChooseNpc = ({
         setNpcForm={setNpcForm}
         setNpcs={setNpcs}
       />
-
-      {npcs.map(npc =>
-        <NpcAvatar
-          key={npc.id}
-          npc={npc}
-          activeNpc={activeNpc}
-          setActiveNpc={setActiveNpc}
-        />
-      )}
     </Box>
   </Box>
 }
