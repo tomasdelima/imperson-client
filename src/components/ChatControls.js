@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
 import { useTheme } from '@mui/material'
 
@@ -28,25 +28,28 @@ const Chat = ({
   const recordDisabled = loading || messages[messages.length - 1]?.role === 'user'
   const lastMessage = messages[messages.length - 1]
 
-  const record = () => {
+  const record = useCallback(() => {
     if (recordDisabled) return
+    if (isRecording) return
 
-    if (!isRecording) {
-      setCanceled(false)
-      startRecording()
-    } else {
-      stopRecording()
-    }
-  }
+    setCanceled(false)
+    startRecording()
+  }, [recordDisabled, isRecording, setCanceled, startRecording])
 
-  const cancel = () => {
+  const stop = useCallback(() => {
+    if (!isRecording) return
+
+    stopRecording()
+  }, [isRecording, stopRecording])
+
+  const cancel = useCallback(() => {
     if (!isRecording) return
 
     stopRecording()
     setCanceled(true)
-  }
+  }, [isRecording, stopRecording, setCanceled])
 
-  const undo = async () => {
+  const undo = useCallback(async () => {
     if (loading) return
     if (isRecording) return
     if (messages.length < 2) return
@@ -59,9 +62,9 @@ const Chat = ({
     } else {
       setMessages(messages.slice(0, -1))
     }
-  }
+  }, [loading, isRecording, messages, setMessages])
 
-  const regenerate = async () => {
+  const regenerate = useCallback(async () => {
     if (loading) return
     if (lastMessage.role === 'system') return
 
@@ -74,19 +77,18 @@ const Chat = ({
 
     setSpeechLoading(false)
     setMessages([...slicedMessages, message])
-  }
+  }, [loading, lastMessage, setSpeechLoading, setAutoPlay, messages, setMessages])
+
+  const keyPress = useCallback((event) => {
+    if (event.target.tagName === 'INPUT') return
+
+    if (event.code === 'Space') isRecording ? stop() : record()
+    if (event.code === 'Escape') cancel()
+  }, [isRecording, stop, record, cancel])
 
   useEffect(() => {
     if (recordingBlob && !canceled && activeNpc?.id) transcribe(recordingBlob)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recordingBlob])
-
-  const keyPress = (event) => {
-    if (event.target.tagName === 'INPUT') return
-
-    if (event.code === 'Space') record()
-    if (event.code === 'Escape') cancel()
-  }
+  }, [recordingBlob, canceled, activeNpc])
 
   useEffect(() => {
     document.addEventListener('keydown', keyPress, false)
@@ -94,7 +96,7 @@ const Chat = ({
     return () => {
       document.removeEventListener('keydown', keyPress, false)
     }
-  }, [])
+  }, [keyPress])
 
   useEffect(() => {
     setAutoPlay(false)
@@ -122,7 +124,7 @@ const Chat = ({
     <Box className="flex flex-row justify-center items-center gap-4">
       <IconButton icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' color='lightPrimary' />
       {isRecording ? <>
-        <IconButton icon={Stop} onClick={record} tooltip='Stop (Space)' color='error' />
+        <IconButton icon={Stop} onClick={stop} tooltip='Stop (Space)' color='error' />
         <IconButton icon={Delete} onClick={cancel} disabled={loading} tooltip='Cancel (Esc)' color='lightPrimary' />
       </> : <>
         <IconButton icon={FiberManualRecord} onClick={record} disabled={recordDisabled} tooltip='Record (Space)' color='error' />
