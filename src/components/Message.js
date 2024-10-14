@@ -24,7 +24,7 @@ const Message = ({ item, autoPlay }) => {
   }
 
   const isAssistant = item.role === 'assistant'
-  let wrapperClass = 'max-w-6xl w-2/3 break-words flex items-center '
+  let wrapperClass = 'max-w-6xl w-4/5 sm:w-2/3 break-words flex items-center '
   wrapperClass += isAssistant ? 'flex-row self-start' : 'flex-row-reverse self-end'
 
   let durationsClass = 'whitespace-nowrap absolute bottom-1 px-2 text-gray-400 transition-all '

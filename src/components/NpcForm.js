@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom"
 
 import { Button, Divider, Grid2, Modal, Paper, Typography } from '@mui/material'
 import Field from './Field.js'
@@ -59,11 +60,11 @@ const NpcForm = ({
   fetchNpcs,
   npc,
   npcs,
-  setActiveNpc,
   setNpcForm,
   setNpcs,
 }) => {
   const [pressedDelete, setPressedDelete] = useState(0)
+  const navigate = useNavigate()
 
   const change = (field, e) => {
     let updatedNpc = { ...npc }
@@ -82,7 +83,7 @@ const NpcForm = ({
       setNpcs([...npcs, response])
     }
 
-    setActiveNpc(response)
+    navigate(`/npcs/${response.id}`, { replace: true })
     close()
     fetchNpcs()
   }
@@ -96,7 +97,7 @@ const NpcForm = ({
     await destroy(`npcs/${npc.id}`)
     setNpcs(npcs.filter((n) => n.id !== npc.id))
     setNpcForm({})
-    setActiveNpc(null)
+    navigate('/', { replace: true })
   }
 
   let deleteLabel = 'Delete'

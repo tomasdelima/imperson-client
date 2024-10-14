@@ -10,16 +10,18 @@ const ChooseNpc = ({
   fetchNpcs,
   npcForm,
   npcs,
-  setActiveNpc,
   setNpcForm,
   setNpcs,
 }) => {
-  return <Box className='flex flex-col flex-grow justify-start items-stretch gap-8 mx-8 overflow-y-auto absolute top-16 bottom-8 left-0 right-0'>
+  return <Box
+    className='flex flex-col flex-grow justify-start items-stretch gap-8 lg:mx-4 px-4 overflow-y-auto absolute top-16 bottom-8 left-0 right-0'
+    sx={{ scrollbarColor: '#8884 transparent', scrollbarWidth: 'thin' }}
+  >
     <Box className='flex flex-col items-stretch shrink-0 overflow-y-auto gap-4'>
       <NpcAvatar
         npc={{ id: 'new', name: 'Add NPC' }}
         activeNpc={activeNpc}
-        setActiveNpc={() => setNpcForm(emptyNpc)}
+        onClick={() => setNpcForm(emptyNpc)}
       >
         <Plus />
       </NpcAvatar>
@@ -29,7 +31,6 @@ const ChooseNpc = ({
           key={npc.id}
           npc={npc}
           activeNpc={activeNpc}
-          setActiveNpc={setActiveNpc}
         />
       )}
 
@@ -38,7 +39,6 @@ const ChooseNpc = ({
         fetchNpcs={fetchNpcs}
         npc={npcForm}
         npcs={npcs}
-        setActiveNpc={setActiveNpc}
         setNpcForm={setNpcForm}
         setNpcs={setNpcs}
       />

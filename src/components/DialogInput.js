@@ -6,7 +6,7 @@ import Send from '@mui/icons-material/Send'
 const DialogInput = ({ dialog, text, setText }) => {
   const handleKeyDown = (event) => event.key === 'Enter' && dialog()
 
-  return <Box className='h-32 w-full flex flex-row items-center gap-8'>
+  return <Box className='h-28 w-full flex flex-row items-center gap-8 pl-8 pr-4 lg:px-0'>
     <TextField
       className='grow rounded'
       value={text}

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAudioRecorder } from 'react-audio-voice-recorder'
 import { useTheme } from '@mui/material'
+import { useNavigate } from "react-router-dom"
 
 import IconButton from './IconButton'
 import { Avatar, Box, Button, Tooltip, Typography } from '@mui/material'
 
-import { ArrowBack, Cached, Delete, FiberManualRecord, Stop } from '@mui/icons-material'
+import { ArrowBack, Cached, Delete, FiberManualRecord, KeyboardArrowLeft, Stop } from '@mui/icons-material'
 
 import destroy from '../utils/destroy.js'
 import post from '../utils/post.js'
@@ -23,6 +24,7 @@ const Chat = ({
   const [canceled, setCanceled] = useState(true)
   const { startRecording, stopRecording, isRecording, recordingBlob } = useAudioRecorder()
   const { palette } = useTheme()
+  const navigate = useNavigate()
 
   const undoDisabled = loading || isRecording || messages.length === 0
   const recordDisabled = loading || messages[messages.length - 1]?.role === 'user'
@@ -106,22 +108,28 @@ const Chat = ({
   if (!activeNpc) return null
 
   return <Box
-    className='flex justify-between items-center h-24 z-10 pl-4 pr-8'
+    className='flex flex-col sm:flex-row justify-between items-center h-36 sm:h-24 z-10 pl-4 pr-8'
     sx={{ background: palette.primary.dark }}
   >
-    <Box className='flex items-center'>
-      <Avatar src={activeNpc.portrait} className='!h-16 !w-16 m-4' />
+    <Box className='flex items-center self-start'>
+      <IconButton icon={KeyboardArrowLeft} onClick={() => navigate('/', { replace: true })} className='lg:!hidden' />
+
+      <Avatar src={activeNpc.portrait} className='!h-10 !w-10 sm:!h-16 sm:!w-16 m-4' />
 
       <Tooltip title='Edit'>
         <Button onClick={() => setNpcForm(activeNpc)}>
-          <Typography className='grow text-left' variant='caption1' color='lightPrimary'>
+          <Typography
+            className='grow text-left whitespace-nowrap overflow-ellipsis overflow-hidden max-w-[50vw] lg:max-w-[30vw]'
+            variant='caption1'
+            color='lightPrimary'
+          >
             {activeNpc.name}
           </Typography>
         </Button>
       </Tooltip>
     </Box>
 
-    <Box className="flex flex-row justify-center items-center gap-4">
+    <Box className="flex flex-row justify-center items-center gap-4 mb-4 sm:mb-0">
       <IconButton icon={ArrowBack} onClick={undo} disabled={undoDisabled} tooltip='Undo' color='lightPrimary' />
       {isRecording ? <>
         <IconButton icon={Stop} onClick={stop} tooltip='Stop (Space)' color='error' />

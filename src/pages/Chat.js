@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Box, Divider, Paper } from '@mui/material'
 import ChatControls from '../components/ChatControls.js'
@@ -20,6 +21,8 @@ const Chat = () => {
   const [speechLoading, setSpeechLoading] = useState(false)
   const [text, setText] = useState('')
   const [transcribeLoading, setTranscribeLoading] = useState(false)
+  const navigate = useNavigate()
+  const { id } = useParams()
 
   const loading = transcribeLoading || speechLoading
 
@@ -88,6 +91,10 @@ const Chat = () => {
   }, [])
 
   useEffect(() => {
+    setActiveNpc(npcs.find(n => ('' + n.id) === id) || null)
+  }, [npcs, id])
+
+  useEffect(() => {
     fetchMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNpc])
@@ -97,8 +104,16 @@ const Chat = () => {
     element?.scrollTo({ top: element.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
+  let leftColumnClass = 'h-full grow w-1/2 md:w-1/3 lg:w-1/4 relative'
+  let rightColumnClass = 'grow h-full relative flex flex-col justify-between items-stretch lg:mr-4'
+  if (activeNpc) {
+    leftColumnClass += ' hidden lg:block'
+  } else {
+    rightColumnClass += ' hidden lg:block'
+  }
+
   return <Box className='h-full flex'>
-    <Box className='h-full w-1/2 md:w-1/3 lg:w-1/4 relative'>
+    <Box className={leftColumnClass}>
       <TopBar />
 
       <ChooseNpc
@@ -106,16 +121,15 @@ const Chat = () => {
         fetchNpcs={fetchNpcs}
         npcForm={npcForm}
         npcs={npcs}
-        setActiveNpc={setActiveNpc}
         setMessages={setMessages}
         setNpcForm={setNpcForm}
         setNpcs={setNpcs}
       />
     </Box>
 
-    <Box className='grow h-full relative flex flex-col justify-between items-stretch mr-8'>
+    <Box className={rightColumnClass}>
       {activeNpc ? <>
-        <Paper elevation={4} className='grow h-full relative mt-8'>
+        <Paper elevation={4} className='grow h-full relative lg:mt-4'>
           <ChatControls
             activeNpc={activeNpc}
             loading={loading}

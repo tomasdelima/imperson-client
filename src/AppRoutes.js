@@ -17,6 +17,7 @@ const AppRoutes = () => <BrowserRouter>
   <Routes>
     <Route element={<AppLayout />}>
       <Route path='/' element={<Chat />} />
+      <Route path='/npcs/:id' element={<Chat />} />
       <Route path='/profile' element={<Profile />} />
     </Route>
 
