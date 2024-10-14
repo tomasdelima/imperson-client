@@ -104,7 +104,7 @@ const Chat = () => {
     element?.scrollTo({ top: element.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
-  let leftColumnClass = 'h-full grow w-1/2 md:w-1/3 lg:w-1/4 relative'
+  let leftColumnClass = 'h-full w-1/2 md:w-1/3 max-w-lg relative'
   let rightColumnClass = 'grow h-full relative flex flex-col justify-between items-stretch lg:mr-4'
   if (activeNpc) {
     leftColumnClass += ' hidden lg:block'
