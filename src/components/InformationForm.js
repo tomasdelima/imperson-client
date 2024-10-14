@@ -27,10 +27,10 @@ const InformationForm = ({ index, information, updateField, deleteInformation })
     <Grid2 size={{ xs: 12, md: 6 }}>
       <Field variant='standard' field="condition" label="If" value={information.condition} onChange={(e) => updateField(index, 'condition', e)} />
     </Grid2>
-    <Grid2 size={{ xs: 8, md: 3 }}>
+    <Grid2 size={{ xs: 12, sm: 8, md: 3 }}>
       <Field type='select' variant='standard' field="check" label="Ask for a(n)" value={information.check} onChange={(e) => updateField(index, 'check', e)} options={skills} />
     </Grid2>
-    <Grid2 size={{ xs: 4, md: 3 }}>
+    <Grid2 size={{ xs: 12, sm: 4, md: 3 }}>
       <Field variant='standard' field="difficulty" label="Check with DC" value={information.difficulty} onChange={(e) => updateField(index, 'difficulty', e)} numeric />
     </Grid2>
     <Grid2 size={{ xs: 12, md: 6 }}>

@@ -31,7 +31,7 @@ const SignIn = () => {
       </Typography> */}
     </Grid2>
 
-    <Typography className='pt-8'>
+    <Typography className='pt-8 px-16'>
       *By signing in you agree with the <a href='/terms-and-conditions'  target='_blank' className='underline'>terms and conditions</a> for using Imperson™.
     </Typography>
   </Box>

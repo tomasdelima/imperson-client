@@ -64,6 +64,7 @@ const SelectField = ({ field, label, variant = 'outlined', value, onChange, opti
     value={value}
     onChange={onChange}
     label={upcaseFirst(label ?? field)}
+    labelId={field}
     variant={variant}
   >
     {options.map((option) => <MenuItem key={option[0]} value={option[0]}>
@@ -96,8 +97,8 @@ const Field = ({
   const inputLabel = type === 'select' ? upcaseFirst(label ?? field) : null
 
   return <Grid2 size='12'>
-    <FormControl fullWidth>
-      {inputLabel && <InputLabel>{inputLabel + error}</InputLabel>}
+    <FormControl fullWidth variant={variant}>
+      {inputLabel && <InputLabel id={field}>{inputLabel + error}</InputLabel>}
 
       <Element
         key={field}

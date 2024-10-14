@@ -139,7 +139,10 @@ const NpcForm = ({
     open={Object.keys(npc).length > 0}
     onClose={close}
   >
-    <Paper className='justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem] rounded'>
+    <Paper
+      className='justify-self-center overflow-x-auto absolute top-10 bottom-10 left-10 right-10 w-[80%] max-w-[60rem]'
+      sx={{ scrollbarColor: '#8884 transparent', scrollbarWidth: 'thin' }}
+    >
       <Grid2 container spacing={4} direction='row' className='p-10'>
         <Grid2 size={12}>
           <Typography variant='h5'>
@@ -148,7 +151,7 @@ const NpcForm = ({
         </Grid2>
 
         {fieldColumns.map((fields, index) =>
-          <Grid2 key={index} container direction='column' size={6}>
+          <Grid2 key={index} container direction='column' size={{ xs: 12, lg: 6 }}>
             {fields.map(({ field, type, label,  options }) => <Field
               key={field}
               field={field}

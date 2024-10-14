@@ -6,7 +6,7 @@ import { Card } from '@mui/material'
 
 const App = () => {
   return <AppTheme>
-    <Card className="h-screen flex flex-col justify-start" sx={{ bgcolor: 'background.default' }}>
+    <Card className="h-screen flex flex-col justify-start !rounded-none" sx={{ bgcolor: 'background.default' }}>
       <AppRoutes />
     </Card>
   </AppTheme>
